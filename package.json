@@ -2,11 +2,12 @@
   "name": "maplesteps-rules",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "fetch-ircc": "node scripts/fetch_ircc_data.js"
   },
   "dependencies": {
+    "cheerio": "^1.1.2",
     "node-fetch": "^3.3.2"
   }
 }
-

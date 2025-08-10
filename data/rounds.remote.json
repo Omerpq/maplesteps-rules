@@ -1,3 +1,16 @@
 {
-  "raw": "<!doctype html>\n\n\n<html class=\"no-js\" dir=\"ltr\" lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\">\n\n<head prefix=\"og: http://ogp.me/ns#\">\n    \n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/>\n<meta charset=\"utf-8\"/>\n<title>Express Entry: Rounds of invitations - Canada.ca</title>\n<meta content=\"width=device-width,initial-scale=1\" name=\"viewport\"/>\n\n\n\t<link rel=\"schema.dcterms\" href=\"http://purl.org/dc/terms/\"/>\n\t<link rel=\"canonical\" href=\"https://www.canada.ca/en/immigration-refugees-citizens"
+  "schema_version": "1.0",
+  "entries": [
+    {
+      "date": "2025-08-08",
+      "category": "French language proficiency (Version 1)",
+      "crs_cutoff": 481,
+      "invitations": 2500,
+      "draw_number": 360,
+      "source_urls": [
+        "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
+      ],
+      "last_checked": "2025-08-10T12:16:15.327Z"
+    }
+  ]
 }

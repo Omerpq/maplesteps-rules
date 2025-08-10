@@ -1,3 +1,35 @@
 {
-  "raw": "<!doctype html>\n<html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\">\n    <head prefix=\"og: http://ogp.me/ns#\">\n        \n<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"/>\n<meta charset=\"utf-8\"/>\n<title>Not Found - Canada.ca</title>\n<meta content=\"width=device-width,initial-scale=1\" name=\"viewport\"/>\n\n\n\t<link rel=\"schema.dcterms\" href=\"http://purl.org/dc/terms/\"/>\n\t<link rel=\"canonical\" href=\"https://www.canada.ca/en/errors/404.html\"/>\n    <link rel=\"alternate\" hreflang=\"en\" href=\"https://ww"
+  "schema_version": "1.0",
+  "last_checked": "2025-08-10T12:16:16.900Z",
+  "source_urls": [
+    "https://ircc.canada.ca/english/information/fees/fees.asp"
+  ],
+  "section_heading": "Economic immigration (including Express Entry)",
+  "fees": [
+    {
+      "code": "PR_APPL_BUNDLE",
+      "label": "Your application Processing fee ($950) and right of permanent residence fee ($575)",
+      "amount_cad": 1525
+    },
+    {
+      "code": "PR_APPL",
+      "label": "Your application (without right of permanent residence fee)",
+      "amount_cad": 950
+    },
+    {
+      "code": "PR_SPOUSE_BUNDLE",
+      "label": "Include your spouse or partner Processing fee ($950) and right of permanent residence fee ($575)",
+      "amount_cad": 1525
+    },
+    {
+      "code": "PR_SPOUSE",
+      "label": "Include your spouse or partner (without right of permanent residence fee)",
+      "amount_cad": 950
+    },
+    {
+      "code": "PR_CHILD",
+      "label": "Include a dependent child",
+      "amount_cad": 260
+    }
+  ]
 }
