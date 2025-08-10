@@ -1,33 +1,61 @@
 import fs from "fs";
 import path from "path";
 import fetch from "node-fetch";
+import * as cheerio from "cheerio";
 
-// URLs for IRCC data pages
 const DRAWS_URL =
   "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html";
 const FEES_URL =
   "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/fees.html";
 
-// Output JSON paths
 const dataDir = path.resolve("./data");
 const drawsFile = path.join(dataDir, "rounds.remote.json");
 const feesFile = path.join(dataDir, "fees.remote.json");
 
+// Fetch latest Express Entry draw info
 async function fetchDraws() {
   console.log("Fetching draws...");
   const html = await (await fetch(DRAWS_URL)).text();
-  // TODO: Add HTML parsing logic here to extract latest draw info
-  // For now, just store raw HTML as proof
-  fs.writeFileSync(drawsFile, JSON.stringify({ raw: html.slice(0, 500) }, null, 2));
+  const $ = cheerio.load(html);
+
+  // Find the first table row in the draws table
+  const firstRow = $("table tbody tr").first();
+  const cells = firstRow.find("td").map((i, el) => $(el).text().trim()).get();
+
+  const drawData = {
+    date: cells[0] || null,
+    category: cells[1] || null,
+    crs_cutoff: cells[2] || null,
+    invitations: cells[3] || null,
+    source: "remote"
+  };
+
+  fs.writeFileSync(drawsFile, JSON.stringify(drawData, null, 2));
   console.log("✅ Draws fetched and saved.");
 }
 
+// Fetch key immigration fees
 async function fetchFees() {
   console.log("Fetching fees...");
   const html = await (await fetch(FEES_URL)).text();
-  // TODO: Add HTML parsing logic here to extract fee table
-  // For now, just store raw HTML as proof
-  fs.writeFileSync(feesFile, JSON.stringify({ raw: html.slice(0, 500) }, null, 2));
+  const $ = cheerio.load(html);
+
+  const keyFees = {};
+  $("table").first().find("tr").each((i, row) => {
+    const cols = $(row).find("td").map((i, el) => $(el).text().trim()).get();
+    if (cols.length >= 2) {
+      keyFees[cols[0]] = cols[1];
+    }
+  });
+
+  const feeData = {
+    version: "live",
+    last_checked: new Date().toISOString(),
+    key_fees: keyFees,
+    source: "remote"
+  };
+
+  fs.writeFileSync(feesFile, JSON.stringify(feeData, null, 2));
   console.log("✅ Fees fetched and saved.");
 }
 
@@ -40,4 +68,3 @@ main().catch(err => {
   console.error("❌ Error fetching IRCC data", err);
   process.exit(1);
 });
-
