@@ -1,0 +1,74 @@
+{
+  "version": "official-demo-2025.08.09",
+  "last_checked": "2025-08-09T00:00:00Z",
+  "source_urls": [
+    "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/eligibility/federal-skilled-workers.html"
+  ],
+  "pass_mark": 67,
+  "education_points": {
+    "phd": 25,
+    "masters": 23,
+    "two_or_more": 22,
+    "bachelor": 21,
+    "one_year_postsecondary": 15,
+    "secondary": 5
+  },
+  "language_primary_per_ability": {
+    "10": 6,
+    "9": 6,
+    "8": 5,
+    "7": 4,
+    "0": 0
+  },
+  "experience_years": [
+    {
+      "min": 1,
+      "max": 1,
+      "points": 9
+    },
+    {
+      "min": 2,
+      "max": 2,
+      "points": 11
+    },
+    {
+      "min": 3,
+      "max": 4,
+      "points": 13
+    },
+    {
+      "min": 5,
+      "max": 50,
+      "points": 15
+    }
+  ],
+  "age_points": [
+    {
+      "min": 18,
+      "max": 35,
+      "points": 12
+    },
+    {
+      "min": 36,
+      "max": 46,
+      "points": 11
+    },
+    {
+      "min": 47,
+      "max": 100,
+      "points": 0
+    }
+  ],
+  "arranged_employment_points": {
+    "yes": 10,
+    "no": 0
+  },
+  "adaptability_points": {
+    "spouse_language_clb4": 5,
+    "relative_in_canada": 5,
+    "canadian_study": 5,
+    "arranged_employment": 5,
+    "canadian_work_1yr": 10
+  },
+  "checksum": "sha256:DEMO"
+}

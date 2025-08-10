@@ -1,0 +1,16 @@
+{
+  "version": "2025.08.09",
+  "last_checked": "2025-08-09T00:00:00Z",
+  "source_urls": [
+    "https://www.canada.ca/en/immigration-refugees-citizenship/corporate/publications-manuals/operational-bulletins-manuals.html"
+  ],
+  "changes": [
+    {
+      "date": "2025-08-05",
+      "section": "Express Entry \u2014 category-based selection",
+      "summary": "Updated guidance on STEM category eligibility examples.",
+      "url": "https://www.canada.ca/.../pdi-update-2025-08-05.html"
+    }
+  ],
+  "checksum": "sha256:DEMO"
+}

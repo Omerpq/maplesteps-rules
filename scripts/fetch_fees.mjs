@@ -1,0 +1,4 @@
+import fetch from 'node-fetch';import * as cheerio from 'cheerio';import fs from 'node:fs';
+const SRC='https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/fees.html';
+const OUT='data/fees.json';
+async function run(){const res=await fetch(SRC);const html=await res.text();const $=cheerio.load(html);const fees=[];$('table tr').each((_,tr)=>{const tds=$(tr).find('td');if(tds.length>=2){const label=$(tds[0]).text().trim();const amount=$(tds[1]).text().replace(/[^0-9.]/g,'');if(label&&amount)fees.push({code:label.slice(0,8).toUpperCase(),label,amount_cad:Number(amount)||null,last_changed:null});}});const json={version:new Date().toISOString().slice(0,10),last_checked:new Date().toISOString(),source_urls:[SRC],fees,checksum:'sha256:TBD'};fs.writeFileSync(OUT,JSON.stringify(json,null,2));console.log(`Wrote ${OUT} with ${fees.length} fees`);}run().catch(e=>{console.error(e);process.exit(1);});

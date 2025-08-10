@@ -1,0 +1,4 @@
+import fetch from 'node-fetch';import * as cheerio from 'cheerio';import fs from 'node:fs';
+const SRC='https://www.canada.ca/en/immigration-refugees-citizenship/corporate/publications-manuals/operational-bulletins-manuals.html';
+const OUT='data/pdi.changelog.json';
+async function run(){const res=await fetch(SRC);const html=await res.text();const $=cheerio.load(html);const changes=[];$('main a').slice(0,10).each((_,el)=>{const href=$(el).attr('href')||'';const text=$(el).text().trim();if(href){changes.push({date:null,section:text,summary:`Updated: ${text}`,url:href.startsWith('http')?href:new URL(href,SRC).toString()});}});const json={version:new Date().toISOString().slice(0,10),last_checked:new Date().toISOString(),source_urls:[SRC],changes,checksum:'sha256:TBD'};fs.writeFileSync(OUT,JSON.stringify(json,null,2));console.log(`Wrote ${OUT} with ${changes.length} PDI entries`);}run().catch(e=>{console.error(e);process.exit(1);});
