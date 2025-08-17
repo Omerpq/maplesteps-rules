@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Linking, TouchableOpacity, ScrollView } from "react-native";
 import { colors } from "../theme/colors";
-import { loadRounds, loadFees } from "../services/updates";
+//import { loadRounds, loadFees, pickDisplayTime } from "../services/updates";
+import {loadRounds,loadFees,pickDisplayTime,type LoaderResult,type Round as RoundType,type Fee} from "../services/updates";
 import { RULES_CONFIG } from "../services/config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -9,16 +10,22 @@ if (__DEV__) {
   console.log("UPDATES_URLS", RULES_CONFIG.roundsUrl, RULES_CONFIG.feesUrl);
 }
 
-type Round = {
-  date: string;
-  category?: string;
-  cutoff?: number;
-  invitations?: number;
-  source_url?: string;
-};
+type Round = RoundType;
+
+
 
 // Helper to only open URLs if they are defined
-const openUrl = (u?: string) => { if (u) Linking.openURL(u); };
+const openUrl = async (u?: string) => {
+  if (!u) return;
+  try {
+    const ok = await Linking.canOpenURL(u);
+    if (ok) await Linking.openURL(u);
+    else if (__DEV__) console.warn("Cannot open URL:", u);
+  } catch (e) {
+    if (__DEV__) console.warn("Open URL failed:", u, e);
+  }
+};
+
 
 const fmtDate = (iso?: string) => {
   if (!iso) return "—";
@@ -67,39 +74,34 @@ export default function UpdatesScreen() {
   // Refreshing
   const [refreshing, setRefreshing] = useState(false);
 
-  // --- helpers (closure over state setters) --- //
-  type LoadResult<T> = {
-    data: T;
-    source: "remote" | "cache" | "local";
-    cachedAt: number | null;
-    meta?: { last_checked?: string; source_url?: string };
-    notice?: string | null;
-  };
+  
 
-  function buildNotice(kind: "rounds" | "fees", r: LoadResult<any>): string {
-    const when = r.cachedAt != null
-      ? new Date(r.cachedAt).toLocaleString()
-      : r.meta?.last_checked ?? "—";
-    const src = r.source === "remote" ? "Remote" : r.source === "cache" ? "Cache" : "Local";
-    return kind === "rounds"
-      ? `Express Entry: ${src} • Last synced ${when}`
-      : `Fees: ${src} • Last synced ${when}`;
+  function buildNotice(kind: "rounds" | "fees", r: any): string {
+  // A4 rule: compute display time via pickDisplayTime
+  const ts = pickDisplayTime(r);
+  const when = ts != null ? new Date(ts).toLocaleString() : "—";
+  const src = r.source === "remote" ? "Remote" : r.source === "cache" ? "Cache" : "Local";
+  return kind === "rounds"
+    ? `Express Entry: ${src} • Last synced ${when}`
+    : `Fees: ${src} • Last synced ${when}`;
+}
+
+
+  function applyRounds(r: LoaderResult<Round[]>) {
+  setRounds(r.data);
+  setRoundsSrc(r.source);
+  setRoundsCachedAt(pickDisplayTime(r));
+  setRoundsNotice(buildNotice("rounds", r));
+
   }
 
-  function applyRounds(r: LoadResult<Round[]>) {
-    setRounds(r.data);
-    setRoundsSrc(r.source);
-    setRoundsCachedAt(r.cachedAt ?? null);
-    setRoundsNotice(r.notice ?? buildNotice("rounds", r));
-  }
-
-  function applyFees(f: LoadResult<any[]>) {
-    setFeesList(f.data);
-    setFeesMeta(f.meta || null);
-    setFeesSrc(f.source);
-    setFeesCachedAt(f.cachedAt ?? null);
-    setFeesNotice(f.notice ?? buildNotice("fees", f));
-  }
+  function applyFees(f: LoaderResult<Fee[]>) {
+  setFeesList(f.data);
+  setFeesMeta(f.meta || null);
+  setFeesSrc(f.source);
+  setFeesCachedAt(pickDisplayTime(f));
+  setFeesNotice(buildNotice("fees", f));
+}
   // --- end helpers --- //
 
   const refresh = async () => {
@@ -137,35 +139,49 @@ export default function UpdatesScreen() {
   const latest = rounds && rounds.length ? rounds[0] : null;
 
   const clearCache = async () => {
-    await AsyncStorage.removeItem("ms_rounds_cache_v1");
+    await AsyncStorage.removeItem("ms_rounds_cache_v2");
     await AsyncStorage.removeItem("ms_fees_cache_v1");
     await refresh(); // re-load to show local/remote right away
   };
 
   const clearIRCCCache = async () => {
-    await AsyncStorage.removeItem("ms_rounds_cache_v1");
+    await AsyncStorage.removeItem("ms_rounds_cache_v2");
     await AsyncStorage.removeItem("ms_fees_cache_v1");
     console.log("IRCC cache cleared");
   };
 
 
 const logCache = async () => {
-  if (!__DEV__) return;   // dev-only
+  if (!__DEV__) return; // dev-only
 
   const [r, f] = await Promise.all([
-    AsyncStorage.getItem("ms_rounds_cache_v1"),
+    AsyncStorage.getItem("ms_rounds_cache_v2"),
     AsyncStorage.getItem("ms_fees_cache_v1"),
   ]);
+
   console.log(
     "CACHE_DEBUG rounds:", r ? "present" : "missing",
     "fees:",             f ? "present" : "missing"
   );
+
   try {
-    if (r) console.log("CACHE_DEBUG rounds.cachedAt:", JSON.parse(r)?.cachedAt);
-    if (f) console.log("CACHE_DEBUG  fees.cachedAt:", JSON.parse(f)?.cachedAt);
+    const rr = r ? JSON.parse(r) : null; // { savedAt, meta, data }
+    const ff = f ? JSON.parse(f) : null;
+
+    if (rr) console.log("CACHE_DEBUG rounds.savedAt:", rr.savedAt, "last_checked:", rr.meta?.last_checked);
+    if (ff) console.log("CACHE_DEBUG  fees.savedAt:", ff.savedAt, "last_checked:", ff.meta?.last_checked);
   } catch (e) {
     console.warn("CACHE_DEBUG parse error:", e);
   }
+};
+
+const clearUpdatesCaches = async () => {
+  if (!__DEV__) return; // dev-only
+  await AsyncStorage.multiRemove([
+    "ms_rounds_cache_v2",
+    "ms_fees_cache_v1",
+  ]);
+  console.log("CACHE_DEBUG cleared: ms_rounds_cache_v2, ms_fees_cache_v1");
 };
 
 
@@ -212,16 +228,13 @@ const logCache = async () => {
                 ? "Live data not available. The data being shown might not be correct."
                 : "Showing last available data saved on this device."}
               {(() => {
-                let ts: number | null = typeof feesCachedAt === "number" ? feesCachedAt : null;
-                // If fully local and no cachedAt, fall back to file metadata
-                if (!ts && feesSrc === "local" && feesMeta?.last_checked) {
-                  const parsed = Date.parse(feesMeta.last_checked);
-                  ts = isNaN(parsed) ? null : parsed;
-                }
-                return ts
-                  ? ` • System was last available at ${fmtDateTime(new Date(ts))} (${fmtAgo(ts)})`
-                  : "";
-              })()}
+  const ts = typeof feesCachedAt === "number" ? feesCachedAt : null;
+  return ts
+    ? ` • System was last available at ${fmtDateTime(new Date(ts))} (${fmtAgo(ts)})`
+    : "";
+})()}
+
+
             </Text>
           )}
         </View>
@@ -237,6 +250,9 @@ const logCache = async () => {
             </Text>
 
             <Text style={styles.meta}>Date: {fmtDate(latest.date)}</Text>
+            {latest.draw_number != null && (
+              <Text style={styles.meta}>Draw: {latest.draw_number}</Text>
+            )}
             <Text style={styles.meta}>Category: {latest.category || "General"}</Text>
             <Text style={styles.meta}>Cutoff CRS: {latest.cutoff ?? "—"}</Text>
             <Text style={styles.meta}>Invitations: {latest.invitations ?? "—"}</Text>
