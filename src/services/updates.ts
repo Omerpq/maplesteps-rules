@@ -138,28 +138,7 @@ async function fetchJson(url: string, ms = FETCH_MS) {
 
 
 const normRounds = (json: any) => {
-  // lightweight helpers local to this function (so you don't depend on anything else)
-  const safeIrccUrl = (u?: string) => {
-    if (!u) return undefined;
-    try {
-      const absolute = u.startsWith("http") ? u : `https://www.canada.ca${u}`;
-      const url = new URL(absolute);
-      if (url.protocol !== "https:") return undefined;
-      if (!/\.?canada\.ca$/.test(url.hostname)) return undefined;
-      return url.toString();
-    } catch {
-      return undefined;
-    }
-  };
-  const toNum = (v: any): number | undefined => {
-    if (typeof v === "number") return v;
-    if (typeof v === "string") {
-      const n = Number.parseInt(v.replace(/[^\d]/g, ""), 10);
-      return Number.isFinite(n) ? n : undefined;
-    }
-    return undefined;
-  };
-
+  
   const arr = Array.isArray(json?.rounds) ? json.rounds
     : Array.isArray(json?.entries) ? json.entries
     : (Array.isArray(json) ? json : []);
