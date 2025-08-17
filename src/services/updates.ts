@@ -25,6 +25,22 @@ type CacheEnvelope<T> = {
 const ROUND_CACHE_KEY = "ms_rounds_cache_v2";
 const FEES_CACHE_KEY  = "ms_fees_cache_v1";
 
+
+// ----- Optional migration: clear legacy rounds cache v1 once -----
+const LEGACY_ROUNDS_V1 = "ms_rounds_cache_v1";
+const UPDATES_MIGRATION_FLAG = "ms_updates_migrated_v1";
+
+export async function migrateUpdatesCachesOnce() {
+  try {
+    const done = await AsyncStorage.getItem(UPDATES_MIGRATION_FLAG);
+    if (done) return;
+    await AsyncStorage.removeItem(LEGACY_ROUNDS_V1);
+    await AsyncStorage.setItem(UPDATES_MIGRATION_FLAG, "1");
+  } catch {
+    // ignore
+  }
+}
+
 // Network timeout (same as A3/web rule)
 const FETCH_MS = 12000;
 

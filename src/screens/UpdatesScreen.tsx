@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Linking, TouchableOpacity, ScrollView } from "react-native";
 import { colors } from "../theme/colors";
 //import { loadRounds, loadFees, pickDisplayTime } from "../services/updates";
-import {loadRounds,loadFees,pickDisplayTime,type LoaderResult,type Round as RoundType,type Fee} from "../services/updates";
+import {loadRounds,loadFees,pickDisplayTime,migrateUpdatesCachesOnce, type LoaderResult,type Round as RoundType,type Fee} from "../services/updates";
 import { RULES_CONFIG } from "../services/config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+
 
 if (__DEV__) {
   console.log("UPDATES_URLS", RULES_CONFIG.roundsUrl, RULES_CONFIG.feesUrl);
@@ -125,6 +127,8 @@ export default function UpdatesScreen() {
 
   useEffect(() => {
     (async () => {
+      await migrateUpdatesCachesOnce();
+
       try {
         const [r, f] = await Promise.all([loadRounds(), loadFees()]);
         applyRounds(r as any);
