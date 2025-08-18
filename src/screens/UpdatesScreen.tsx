@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Linking, TouchableOpacity, ScrollView } from "react-native";
 import { colors } from "../theme/colors";
-//import { loadRounds, loadFees, pickDisplayTime } from "../services/updates";
-import {loadRounds,loadFees,pickDisplayTime,migrateUpdatesCachesOnce, type LoaderResult,type Round as RoundType,type Fee} from "../services/updates";
+import { loadRounds, loadFees, pickDisplayTime, migrateUpdatesCachesOnce,
+         type LoaderResult, type Round as RoundType, type Fee,
+         isCategoryDraw } from "../services/updates";
+
 import { RULES_CONFIG } from "../services/config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -141,6 +143,8 @@ export default function UpdatesScreen() {
   }, []);
 
   const latest = rounds && rounds.length ? rounds[0] : null;
+  const showCategoryHint = isCategoryDraw(latest?.category);
+
 
   const clearCache = async () => {
     await AsyncStorage.removeItem("ms_rounds_cache_v2");
@@ -258,6 +262,10 @@ const clearUpdatesCaches = async () => {
               <Text style={styles.meta}>Draw: {latest.draw_number}</Text>
             )}
             <Text style={styles.meta}>Category: {latest.category || "General"}</Text>
+            {showCategoryHint && (
+              <Text style={styles.categoryHint}>This was a category based draw.</Text>
+            )}
+
             <Text style={styles.meta}>Cutoff CRS: {latest.cutoff ?? "—"}</Text>
             <Text style={styles.meta}>Invitations: {latest.invitations ?? "—"}</Text>
             {latest.source_url ? (
@@ -351,5 +359,11 @@ const styles = StyleSheet.create({
     color: "#ffcc00",
     fontSize: 13,
     lineHeight: 18,
+  },
+  categoryHint: {
+    marginTop: 2,
+    fontSize: 12,
+    fontStyle: "italic",
+    color: "#9CA3AF",
   },
 });

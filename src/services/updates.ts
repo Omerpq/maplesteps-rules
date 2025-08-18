@@ -317,3 +317,15 @@ export async function loadFees(): Promise<LoaderResult<Fee[]>> {
 }
 
 export const __test__ = { normRounds };
+
+// A5 — category detector (exported)
+export const IS_CATEGORY_KEYS = ["stem","healthcare","trades","transport","agriculture","french"] as const;
+
+export function isCategoryDraw(raw?: string): boolean {
+  const s = String(raw ?? "").trim().toLowerCase();
+  if (!s || ["general", "no program specified", "none"].includes(s)) return false;
+  return IS_CATEGORY_KEYS.some(k => s.includes(k));
+}
+
+// TEMP sanity marker (to confirm the right file is being picked)
+export const __A5_MARKER__ = "updates.ts::isCategoryDraw present";
