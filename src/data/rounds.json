@@ -1,0 +1,13 @@
+{
+  "last_checked": "2025-08-10T22:05:00Z",
+  "entries": [
+    {
+      "date": "2025-08-08",
+      "category": "French language proficiency (Version 1)",
+      "crs_cutoff": 481,
+      "invitations": 2500,
+      "draw_number": 360,
+      "source_urls": ["https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"]
+    }
+  ]
+}

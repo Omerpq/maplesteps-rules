@@ -1,0 +1,11 @@
+{
+  "rules_version": "2025.08.09",
+  "calculators": {
+    "crs": {
+      "note": "Populate from server later"
+    },
+    "fsw67": {
+      "note": "Populate from server later"
+    }
+  }
+}
