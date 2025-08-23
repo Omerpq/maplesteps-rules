@@ -74,7 +74,6 @@ describe("FSW UI (QuickCheck & Score)", () => {
     fireEvent.changeText(getByTestId("qc-clb"), "9");
     fireEvent.changeText(getByTestId("qc-years"), "1");
     fireEvent(getByTestId("qc-education"), "onValueChange", "bachelor");
-
     fireEvent.press(getByTestId("qc-fsw-check"));
     expect(getByTestId("qc-fsw-result")).toHaveTextContent("FSW score 66 / 67");
 
@@ -221,6 +220,62 @@ fireEvent.press(sc.getByTestId("sc-fsw-check"));
   const scTotal = pickNum(sc.getByTestId("sc-fsw-result"));
   expect(Number.isNaN(qcTotal)).toBe(false);
   expect(qcTotal).toBe(scTotal);
+});
+test("CRS (B6) toggles do NOT change FSW result", async () => {
+  const mockNav = {
+    navigate: jest.fn(),
+    addListener: jest.fn().mockImplementation((event: string, cb: () => void) => {
+      if (event === "focus" && typeof cb === "function") cb();
+      return jest.fn();
+    }),
+  };
+
+  const { getByTestId } = render(<ScoreScreen navigation={mockNav as any} />);
+  await act(async () => { await Promise.resolve(); });
+
+  // Shared inputs
+  fireEvent.changeText(getByTestId("sc-age"), "29");
+  fireEvent.changeText(getByTestId("sc-clb"), "9");
+  fireEvent(getByTestId("sc-education"), "onValueChange", "bachelor");
+
+  // FSW inputs
+  fireEvent.changeText(getByTestId("sc-fsw-years"), "1");
+  fireEvent(getByTestId("sc-fsw-arranged"), "valueChange", false);
+
+  // Ensure Adaptability OFF (clean baseline)
+  fireEvent(getByTestId("sc-ad-spouse"), "valueChange", false);
+  fireEvent(getByTestId("sc-ad-relative"), "valueChange", false);
+  fireEvent(getByTestId("sc-ad-study"), "valueChange", false);
+  fireEvent(getByTestId("sc-ad-arranged"), "valueChange", false);
+  fireEvent(getByTestId("sc-ad-work1yr"), "valueChange", false);
+
+  // Baseline FSW
+  fireEvent.press(getByTestId("sc-fsw-check"));
+  expect(getByTestId("sc-fsw-result")).toHaveTextContent("Score 66 / 67");
+
+  // === Flip B6 (CRS) inputs — FSW must NOT change ===
+
+  // PNP ON
+  fireEvent(getByTestId("sc-b6-pnp"), "valueChange", true);
+  fireEvent.press(getByTestId("sc-fsw-check"));
+  expect(getByTestId("sc-fsw-result")).toHaveTextContent("Score 66 / 67");
+
+  // Sibling ON
+  fireEvent(getByTestId("sc-b6-sibling"), "valueChange", true);
+  fireEvent.press(getByTestId("sc-fsw-check"));
+  expect(getByTestId("sc-fsw-result")).toHaveTextContent("Score 66 / 67");
+
+  // French CLB -> 7
+  fireEvent.changeText(getByTestId("sc-b6-french-clb"), "7");
+  fireEvent.press(getByTestId("sc-fsw-check"));
+  expect(getByTestId("sc-fsw-result")).toHaveTextContent("Score 66 / 67");
+
+  // Reset B6
+  fireEvent(getByTestId("sc-b6-pnp"), "valueChange", false);
+  fireEvent(getByTestId("sc-b6-sibling"), "valueChange", false);
+  fireEvent.changeText(getByTestId("sc-b6-french-clb"), "0");
+  fireEvent.press(getByTestId("sc-fsw-check"));
+  expect(getByTestId("sc-fsw-result")).toHaveTextContent("Score 66 / 67");
 });
 
 });

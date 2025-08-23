@@ -218,21 +218,25 @@ education,
         <Text style={styles.cardMeta}>PNP, sibling, French, Canadian study</Text>
         
         {/* PNP */}
-        <View style={[styles.row, { alignItems: "center" }]}>
-          <Text style={styles.label}>Provincial Nomination (PNP)</Text>
-          <Switch
-            value={extras.hasPNP}
-            onValueChange={(v) => setExtras((e) => ({ ...e, hasPNP: v }))}
-          />
-        </View>
+<View style={[styles.row, { alignItems: "center" }]}>
+  <Text style={styles.label}>Provincial Nomination (PNP)</Text>
+  <Switch
+    value={extras.hasPNP}
+    onValueChange={(v) => setExtras((e) => ({ ...e, hasPNP: v }))}
+    testID="sc-b6-pnp"
+  />
+</View>
+
 
         {/* Sibling */}
         <View style={[styles.row, { alignItems: "center" }]}>
           <Text style={styles.label}>Sibling in Canada</Text>
           <Switch
-            value={extras.hasSibling}
-            onValueChange={(v) => setExtras((e) => ({ ...e, hasSibling: v }))}
-          />
+          value={extras.hasSibling}
+          onValueChange={(v) => setExtras((e) => ({ ...e, hasSibling: v }))}
+          testID="sc-b6-sibling"
+        />
+
         </View>
 
         {/* French CLB */}
@@ -248,6 +252,8 @@ education,
               setExtras((e) => ({ ...e, frenchCLB: n }));
             }}
             maxLength={2}
+            testID="sc-b6-french-clb"
+
           />
         </View>
         <Text style={styles.hint}>French bonus: CLB 5–6 +25; 7–10 +50 (not cumulative).</Text>
