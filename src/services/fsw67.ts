@@ -62,30 +62,26 @@ let fswCachedAtMs: number | null = null; // if not already present, add this
 
 
 // Drop-in replacement for both files
+// -- keep function signature as-is --
 async function fetchWithTimeout(url: string, init?: RequestInit, timeoutMs = 12000) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
-
   try {
-    // bust caches without sending custom headers on web
     const u = url + (url.includes("?") ? "&" : "?") + "t=" + Date.now();
     const isWeb = typeof window !== "undefined";
 
-    // start from caller options
     const finalInit: RequestInit = {
-      ...init,
+      ...(init || {}),
       cache: "no-store",
       signal: ctrl.signal,
     };
 
     if (isWeb) {
-      // IMPORTANT: do not send any custom headers on web, or it will trigger a CORS preflight
+      // No custom headers on web → avoid CORS preflight
       if (finalInit.headers) delete (finalInit as any).headers;
-      // default mode is "cors" – keep it; do NOT use "no-cors" (that would yield an opaque response)
     } else {
-      // Native (RN iOS/Android) can keep explicit no-cache headers
       finalInit.headers = {
-        ...(init?.headers as any),
+        ...((init?.headers as any) || {}),
         "Cache-Control": "no-store, no-cache, must-revalidate",
         Pragma: "no-cache",
       };
@@ -96,6 +92,7 @@ async function fetchWithTimeout(url: string, init?: RequestInit, timeoutMs = 120
     clearTimeout(timer);
   }
 }
+
 
 
 // Try remote first; fall back to local.
@@ -109,24 +106,26 @@ export async function primeFswParams(): Promise<any> {
   FSW_LOG && FSW_LOG("prime() start", { baseUrl: !!baseUrl, offline, onLine });
 
   // 1) REMOTE
-  if (fetchUrl) {
-    try {
-      FSW_LOG && FSW_LOG("REMOTE try", { url: fetchUrl });
-const remote = await fetchWithTimeout(fetchUrl, undefined, 12000);
-      cache = remote;
-      lastSyncedISO = new Date().toISOString();
-      fswCachedAtMs = Date.now();
-      fswSource = "remote";
-      __branch = "remote";
-      try { await AsyncStorage.setItem(K_FSW, JSON.stringify({ json: remote, ts: fswCachedAtMs })); } catch { }
-      FSW_LOG && FSW_LOG("REMOTE success", { tookMs: Date.now() - __t0, savedAt: fswCachedAtMs });
-      return cache;
-    } catch (e) {
-      FSW_LOG && FSW_LOG("REMOTE fail -> will try CACHE", { error: String(e) });
-    }
-  } else {
-    FSW_LOG && FSW_LOG("REMOTE skipped", { offline, onLine });
+  // In primeFswParams() — replace the REMOTE block
+if (fetchUrl) {
+  try {
+    FSW_LOG && FSW_LOG("REMOTE try", { url: fetchUrl });
+    const res = await fetchWithTimeout(fetchUrl, undefined, 12000);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const remote = await res.json();            // <— parse JSON
+
+    cache = remote;                              // now real params JSON
+    lastSyncedISO = new Date().toISOString();
+    fswCachedAtMs = Date.now();
+    fswSource = "remote";
+    try { await AsyncStorage.setItem(K_FSW, JSON.stringify({ json: remote, ts: fswCachedAtMs })); } catch {}
+    FSW_LOG && FSW_LOG("REMOTE success", { tookMs: Date.now() - __t0, savedAt: fswCachedAtMs });
+    return cache;
+  } catch (e) {
+    FSW_LOG && FSW_LOG("REMOTE fail -> will try CACHE", { error: String(e) });
   }
+}
+
 
   // 2) CACHE
   try {
@@ -163,8 +162,12 @@ const remote = await fetchWithTimeout(fetchUrl, undefined, 12000);
 
 
 function getParamsSync(): any {
-  return cache || localParams;
+  const c = cache;
+  // if cache isn’t a params object, fall back to local
+  if (c && typeof c === "object" && (("education_points" in c) || ("age_points" in c))) return c;
+  return localParams;
 }
+
 
 export function getFswVersion(): string {
   const p = getParamsSync();

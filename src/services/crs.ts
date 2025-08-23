@@ -208,3 +208,50 @@ export function getCrsSource(): "remote" | "cache" | "local" {
 export function getCrsCachedAt(): number | null {
   return crsCachedAtMs ?? null;
 }
+
+// --- B6: Additional CRS (session + stub math) -------------------------------
+
+export type CRSAdditionalInputs = {
+  hasPNP: boolean;              // Provincial Nomination
+  hasSibling: boolean;          // Sibling in Canada
+  frenchCLB: number;            // 0–10
+  study: 'none' | '1-2' | '2+'; // Canadian study length
+};
+
+const __DEFAULT_EXTRAS: CRSAdditionalInputs = {
+  hasPNP: false,
+  hasSibling: false,
+  frenchCLB: 0,
+  study: 'none',
+};
+
+// In-memory (per app run) session cache for Score screen.
+// (Intentional: do NOT use AsyncStorage per “state persisted per screen session”.)
+let __scoreExtrasSession: CRSAdditionalInputs | null = null;
+
+export function loadCRSSessionExtras(): CRSAdditionalInputs {
+  return __scoreExtrasSession ? { ...__scoreExtrasSession } : { ...__DEFAULT_EXTRAS };
+}
+
+export function saveCRSSessionExtras(extras: CRSAdditionalInputs): void {
+  __scoreExtrasSession = { ...extras };
+}
+
+// Stub math (B6): PNP +600; sibling +15; French +25/+50; study +15/+30.
+// French rule: CLB ≥7 → +50; CLB 5–6 → +25; else 0.
+export function computeAdditionalCRS(extras: CRSAdditionalInputs): number {
+  let add = 0;
+  if (extras.hasPNP) add += 600;
+  if (extras.hasSibling) add += 15;
+  if (extras.frenchCLB >= 7) add += 50;
+  else if (extras.frenchCLB >= 5) add += 25;
+  if (extras.study === '1-2') add += 15;
+  else if (extras.study === '2+') add += 30;
+  return add;
+}
+
+// Convenience combiner for consumers
+export function withAdditionalCRS(baseTotal: number, extras: CRSAdditionalInputs) {
+  const additional = computeAdditionalCRS(extras);
+  return { additional, total: baseTotal + additional };
+}

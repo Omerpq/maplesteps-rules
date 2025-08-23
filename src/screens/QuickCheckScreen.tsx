@@ -7,13 +7,17 @@ import RulesBadge from "../components/RulesBadge"; // (add with other imports)
 
 import { clearAllRulesCaches } from "../services/rules";
 import { primeCrsParams } from "../services/crs";
+import { Picker } from "@react-native-picker/picker";
 
 
 export default function QuickCheckScreen() {
   const [age, setAge] = useState("29");
   const [clb, setClb] = useState("9");
   const [years, setYears] = useState("3");
-  const [education, setEducation] = useState("masters"); // bachelor | masters | phd | two_or_more | secondary | one_year_postsecondary
+  const [education, setEducation] =
+  useState<"secondary" | "one_year_postsecondary" | "bachelor" | "two_or_more" | "masters" | "phd">("bachelor");
+
+
   const [arranged, setArranged] = useState(false);
 
   const [synced, setSynced] = useState<string>("local");
@@ -36,7 +40,7 @@ export default function QuickCheckScreen() {
     const r = calculateFsw67({
       age: Number(age) || 0,
       clb: Number(clb) || 0,
-      education: (education || "bachelor") as any,
+      education,
       experienceYears: Number(years) || 0,
       arrangedEmployment: arranged,
       adaptability: {}
@@ -51,34 +55,56 @@ export default function QuickCheckScreen() {
 
       <View style={styles.row}>
         <Text style={styles.label}>Age</Text>
-        <TextInput keyboardType="number-pad" value={age} onChangeText={setAge} style={styles.input} />
+        <TextInput keyboardType="number-pad" value={age} onChangeText={setAge} style={styles.input} testID="qc-age" />
+
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Primary language CLB</Text>
-        <TextInput keyboardType="number-pad" value={clb} onChangeText={setClb} style={styles.input} />
+        <TextInput keyboardType="number-pad" value={clb} onChangeText={setClb} style={styles.input} testID="qc-clb" />
+
       </View>
       <View style={styles.row}>
         <Text style={styles.label}>Skilled experience years</Text>
-        <TextInput keyboardType="number-pad" value={years} onChangeText={setYears} style={styles.input} />
+        <TextInput keyboardType="number-pad" value={years} onChangeText={setYears} style={styles.input} testID="qc-years" />
+
       </View>
       <View style={styles.row}>
-        <Text style={styles.label}>Education (e.g. bachelor/masters/phd)</Text>
-        <TextInput autoCapitalize="none" value={education} onChangeText={setEducation} style={styles.input} />
-      </View>
+  <Text style={styles.label}>Education</Text>
+  <View style={{ flex: 1, borderWidth: 1, borderColor: "#ddd", borderRadius: 6 }}>
+    <Picker
+  selectedValue={education}
+  onValueChange={(v) => setEducation(v as any)}
+  testID="qc-education"
+>
+
+      <Picker.Item label="Secondary (High school)" value="secondary" />
+<Picker.Item label="One-year postsecondary diploma" value="one_year_postsecondary" />
+<Picker.Item label="Bachelor’s degree" value="bachelor" />
+<Picker.Item label="Two or more credentials (incl. one 3+ years)" value="two_or_more" />
+<Picker.Item label="Master’s degree" value="masters" />
+<Picker.Item label="PhD / Doctorate" value="phd" />
+
+    </Picker>
+  </View>
+</View>
+
       <View style={[styles.row, { alignItems: "center" }]}>
-        <Text style={styles.label}>Arranged employment (LMIA/valid offer)</Text>
-        <Switch value={arranged} onValueChange={setArranged} />
+<Text style={styles.label}>Arranged employment — 10 points (FSW factor)</Text>
+        <Switch value={arranged} onValueChange={setArranged} testID="qc-arranged" />
+
       </View>
 
-      <PrimaryButton title="Check" onPress={runCheck} />
+      <PrimaryButton title="Check" onPress={runCheck} testID="qc-fsw-check" />
 
-      {result && (
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>{result.classification}</Text>
-          <Text style={styles.cardMeta}>FSW score {result.total} / {result.passMark}</Text>
-          <Text style={styles.disclaimer}>Educational tool — not legal advice. See Score tab for full breakdown.</Text>
-        </View>
-      )}
+
+    {result && (
+  <View style={styles.card}>
+    <Text style={styles.cardTitle} testID="qc-fsw-classification">{result.classification}</Text>
+    <Text style={styles.cardMeta} testID="qc-fsw-result">FSW score {result.total} / {result.passMark}</Text>
+    <Text style={styles.disclaimer}>Educational tool — not legal advice. See Score tab for full breakdown.</Text>
+  </View>
+)}
+
     </View>
   );
 }
