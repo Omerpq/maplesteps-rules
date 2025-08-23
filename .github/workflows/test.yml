@@ -14,6 +14,6 @@ jobs:
         with:
           node-version: 20
           cache: npm
-      - run: npm ci
+      - run: npm ci --legacy-peer-deps
       - run: npm run test:ui -- --maxWorkers=50%
       - run: npm test -- --maxWorkers=50%
