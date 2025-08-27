@@ -14,12 +14,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: node -v
+
+      # Debug: show where we are and that scripts/ exists
+      - run: |
+          pwd
+          git rev-parse HEAD
+          ls -la
+          ls -la scripts || true
+
       - run: node scripts/fetch_noc.mjs
       - run: node scripts/fetch_ircc_categories.mjs
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
