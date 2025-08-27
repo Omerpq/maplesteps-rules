@@ -1,4 +1,4 @@
-//import fetch from 'node-fetch';import * as cheerio from 'cheerio';import fs from 'node:fs';
+import fetch from 'node-fetch';import * as cheerio from 'cheerio';import fs from 'node:fs';
 const SRC='https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html';
 const OUT='data/rounds.json';
 async function run(){const res=await fetch(SRC);const html=await res.text();const $=cheerio.load(html);const entries=[];$('main a').each((_,el)=>{const href=$(el).attr('href')||'';const text=$(el).text().trim();if(/round/.test(href)&&/202|201/.test(text)){entries.push({date:text.split('-')[0]?.trim()||'',draw_number:null,program:'',category:'',crs_cutoff:null,invitations:null,notes:'',source_url:href.startsWith('http')?href:new URL(href,SRC).toString()});}});const json={version:new Date().toISOString().slice(0,10),last_checked:new Date().toISOString(),source_urls:[SRC],entries,checksum:'sha256:TBD'};fs.writeFileSync(OUT,JSON.stringify(json,null,2));console.log(`Wrote ${OUT} with ${entries.length} entries`);}run().catch(e=>{console.error(e);process.exit(1);});
