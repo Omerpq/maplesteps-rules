@@ -14,7 +14,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: npm ci
       - run: node scripts/fetch_rounds.mjs
       - run: node scripts/fetch_fees.mjs
       - run: node scripts/fetch_pdi.mjs
