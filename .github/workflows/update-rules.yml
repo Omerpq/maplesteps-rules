@@ -18,6 +18,9 @@ jobs:
       - run: node scripts/fetch_rounds.mjs
       - run: node scripts/fetch_fees.mjs
       - run: node scripts/fetch_pdi.mjs
+      - run: node scripts/fetch_noc.mjs
+      - run: node scripts/fetch_ircc_categories.mjs
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
