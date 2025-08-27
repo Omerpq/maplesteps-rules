@@ -1,0 +1,21 @@
+{
+  "schema_version": "1",
+  "last_checked": "2025-08-27",
+  "source_url": "https://www.canada.ca/",
+  "categories": [
+    {
+      "key": "stem",
+      "title": "STEM (example)",
+      "codes": [
+        "21231"
+      ]
+    },
+    {
+      "key": "trades",
+      "title": "Skilled trades (example)",
+      "codes": [
+        "62020"
+      ]
+    }
+  ]
+}
