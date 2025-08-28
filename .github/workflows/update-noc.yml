@@ -22,15 +22,13 @@ jobs:
         with:
           node-version: 20
 
-      # Debug: show where we are and that scripts/ exists
-      - run: |
-          pwd
-          git rev-parse HEAD
-          ls -la
-          ls -la scripts || true
-
+      # Fetch latest data (these also update last_checked)
       - run: node scripts/fetch_noc.mjs
       - run: node scripts/fetch_ircc_categories.mjs
+
+      # Validate files BEFORE opening a PR
+      - name: Validate JSON
+        run: node scripts/validate_noc.mjs
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
