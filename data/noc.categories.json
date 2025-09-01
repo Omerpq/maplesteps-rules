@@ -1,21 +1,17 @@
 {
-  "schema_version": "1",
-  "last_checked": "2025-08-27",
-  "source_url": "https://www.canada.ca/",
-  "categories": [
-    {
-      "key": "stem",
-      "title": "STEM (example)",
-      "codes": [
-        "21231"
-      ]
-    },
-    {
-      "key": "trades",
-      "title": "Skilled trades (example)",
-      "codes": [
-        "62020"
-      ]
-    }
-  ]
+  "schema_version": 1,
+  "last_checked": "2025-09-01",
+  "groups": {
+    "agriculture_and_agri_food": [],
+    "education": [],
+    "french_language_proficiency": [],
+    "healthcare_and_social_services": [],
+    "science_technology_engineering_and_math_stem": [],
+    "trade": []
+  },
+  "source": {
+    "name": "IRCC: Category-based selection (Express Entry)",
+    "url": "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations/category-based-selection.html",
+    "retrieved_at": "2025-09-01T08:48:49.396Z"
+  }
 }
