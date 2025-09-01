@@ -66,17 +66,37 @@ function stableGroupsObject(groups) {
   return out;
 }
 
-async function fetchIRCCGroups() {
-  const res = await fetch(IRCC_URL, {
-    headers: {
-      "User-Agent": "MapleStepsRulesBot/1.0 (+https://github.com/maplesteps/)",
-      "Accept": "text/html,application/xhtml+xml",
-    },
-  });
-  if (!res.ok) {
-    throw new Error(`Failed to fetch IRCC page: ${res.status} ${res.statusText}`);
+
+
+async function fetchHtml(url, { tries = 2, timeoutMs = 20000 } = {}) {
+  for (let attempt = 1; attempt <= tries; attempt++) {
+    const ctl = new AbortController();
+    const timer = setTimeout(() => ctl.abort(), timeoutMs);
+    try {
+      const res = await fetch(url, {
+        headers: {
+          "User-Agent": "MapleStepsRulesBot/1.0 (+https://github.com/maplesteps/)",
+          "Accept": "text/html,application/xhtml+xml",
+          "Accept-Language": "en",
+        },
+        redirect: "follow",
+        signal: ctl.signal,
+      });
+      clearTimeout(timer);
+      if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+      return await res.text();
+    } catch (e) {
+      clearTimeout(timer);
+      if (attempt === tries) throw e;
+      await new Promise(r => setTimeout(r, 800 * attempt)); // simple backoff
+    }
   }
-  const html = await res.text();
+}
+
+
+
+async function fetchIRCCGroups() {
+    const html = await fetchHtml(IRCC_URL);
   const $ = cheerio.load(html);
 
   const groups = {};
