@@ -14,35 +14,69 @@ const files = [
 function isISODate(s) {
   return typeof s === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s);
 }
+function isISODatetime(s) {
+  return typeof s === "string" && /^\d{4}-\d{2}-\d{2}T/.test(s);
+}
+function isStringArray(arr) {
+  return Array.isArray(arr) && arr.every((x) => typeof x === "string");
+}
+function assert(cond, msg) {
+  if (!cond) throw new Error(msg);
+}
+
+async function validateNoc2021(json) {
+  assert(json.schema_version === 1, "noc.2021.json schema_version must be number 1");
+  assert(isISODate(json.last_checked), "noc.2021.json last_checked must be YYYY-MM-DD");
+  assert(Array.isArray(json.items), "noc.2021.json items must be an array");
+  assert(json.items.length > 0, "noc.2021.json items must not be empty");
+
+  for (const it of json.items) {
+    assert(typeof it?.code === "string", "noc.2021.json: item.code must be string");
+    assert(/^\d{5}$/.test(it.code), "noc.2021.json: item.code must be 5 digits");
+    assert(typeof it?.title === "string" && it.title.trim().length > 0, "noc.2021.json: item.title must be non-empty string");
+    assert(Number.isInteger(it?.teer) && it.teer >= 0 && it.teer <= 5, "noc.2021.json: item.teer must be integer 0–5");
+    assert(isStringArray(it?.keywords), "noc.2021.json: item.keywords must be string[]");
+  }
+
+  assert(json.source && typeof json.source === "object", "noc.2021.json: source object required");
+  assert(typeof json.source.name === "string" && json.source.name.length > 0, "noc.2021.json: source.name required");
+  assert(isISODatetime(json.source.retrieved_at), "noc.2021.json: source.retrieved_at must be ISO-8601 datetime");
+}
+
+async function validateCategories(json) {
+  assert(json.schema_version === 1, "noc.categories.json schema_version must be number 1");
+  assert(isISODate(json.last_checked), "noc.categories.json last_checked must be YYYY-MM-DD");
+
+  // groups is an object map: { [groupName]: string[] of NOC codes }
+  assert(json.groups && typeof json.groups === "object" && !Array.isArray(json.groups),
+    "noc.categories.json must contain a 'groups' object");
+
+  for (const [groupName, codes] of Object.entries(json.groups)) {
+    assert(typeof groupName === "string" && groupName.length > 0,
+      "noc.categories.json: group name must be a non-empty string");
+    assert(isStringArray(codes), `noc.categories.json: groups['${groupName}'] must be string[]`);
+    // Optional: ensure they look like NOC codes if provided
+    for (const code of codes) {
+      assert(/^\d{5}$/.test(code), `noc.categories.json: '${groupName}' contains invalid NOC code '${code}' (must be 5 digits)`);
+    }
+  }
+
+  assert(json.source && typeof json.source === "object", "noc.categories.json: source object required");
+  assert(typeof json.source.name === "string" && json.source.name.length > 0, "noc.categories.json: source.name required");
+  assert(isISODatetime(json.source.retrieved_at), "noc.categories.json: source.retrieved_at must be ISO-8601 datetime");
+}
 
 async function main() {
   for (const f of files) {
     const raw = await fs.readFile(f, "utf8");
     let json;
-    try { json = JSON.parse(raw); } catch (e) {
-      throw new Error(`❌ ${path.basename(f)} is not valid JSON: ${e.message}`);
-    }
-
-    // shared meta
-    if (json.schema_version !== "1") throw new Error(`❌ ${path.basename(f)} schema_version must be "1"`);
-    if (!isISODate(json.last_checked)) throw new Error(`❌ ${path.basename(f)} last_checked must be YYYY-MM-DD`);
+    try { json = JSON.parse(raw); }
+    catch (e) { throw new Error(`❌ ${path.basename(f)} is not valid JSON: ${e.message}`); }
 
     if (f.endsWith("noc.2021.json")) {
-      if (!Array.isArray(json.items)) throw new Error("❌ noc.2021.json items must be an array");
-      if (json.items.length < 1) throw new Error("❌ noc.2021.json items must not be empty");
-      for (const it of json.items) {
-        if (typeof it?.code !== "string" || !it.code) throw new Error("❌ noc.2021.json: each item needs string code");
-        if (typeof it?.title !== "string") throw new Error("❌ noc.2021.json: each item needs string title");
-      }
+      await validateNoc2021(json);
     } else {
-      if (!Array.isArray(json.categories)) throw new Error("❌ noc.categories.json categories must be an array");
-      if (json.categories.length < 1) throw new Error("❌ noc.categories.json categories must not be empty");
-      for (const c of json.categories) {
-        if (typeof c?.key !== "string" || !c.key) throw new Error("❌ noc.categories.json: each category needs string key");
-        const codes = Array.isArray(c?.codes) ? c.codes : Array.isArray(c?.noc_codes) ? c.noc_codes : [];
-        if (!Array.isArray(codes)) throw new Error("❌ noc.categories.json: codes/noc_codes must be an array");
-        if (!codes.every(x => typeof x === "string")) throw new Error("❌ noc.categories.json: codes must be strings");
-      }
+      await validateCategories(json);
     }
 
     console.log(`✅ ${path.basename(f)} ok`);

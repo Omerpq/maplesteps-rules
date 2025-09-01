@@ -1,30 +1,43 @@
-name: Update NOC JSON
+name: Update NOC & Categories
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "17 3 * * 2"  # weekly Tue 03:17 UTC
+    - cron: "0 3 * * *"   # daily 03:00 UTC
 
 permissions:
   contents: write
   pull-requests: write
 
+
+concurrency:
+  group: rules-sync
+  cancel-in-progress: true
+
 jobs:
   update:
     runs-on: ubuntu-latest
+    env:
+      NODE_OPTIONS: --max-old-space-size=2048
+      # Optional: set these repo Secrets if/when you wire real endpoints
+      NOC_SOURCE_URL: ${{ secrets.NOC_SOURCE_URL }}
+      NOC_SOURCE_FORMAT: ${{ secrets.NOC_SOURCE_FORMAT }}   # "csv" | "json" | "auto"
+      IRCC_CATEGORIES_URL: ${{ secrets.IRCC_CATEGORIES_URL }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
           fetch-depth: 0
+
 
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'npm'
+      - run: npm ci
 
-      # Fetch latest data (these also update last_checked)
-      - run: node scripts/fetch_noc.mjs
-      - run: node scripts/fetch_ircc_categories.mjs
+      # Fetch latest data (your scripts already update last_checked)
+      - name: Sync NOC & categories
+        run: npm run sync:all
 
       # Validate files BEFORE opening a PR
       - name: Validate JSON
@@ -33,10 +46,13 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
-          commit-message: "chore(noc): update NOC & category JSON (auto)"
+          commit-message: "sync(noc): update NOC & categories JSON (auto)"
           branch: bot/noc-update
-          title: "chore(noc): Update NOC & categories JSON"
-          body: "Automated NOC data refresh."
+          title: "sync(noc): Update NOC & categories JSON"
+          body: "Automated refresh for NOC + categories."
+          add-paths: |
+            data/noc.2021.json
+            data/noc.categories.json
           labels: |
             automated
             rules
