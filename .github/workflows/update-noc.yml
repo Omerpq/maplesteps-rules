@@ -19,10 +19,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NODE_OPTIONS: --max-old-space-size=2048
-      # Optional: set these repo Secrets if/when you wire real endpoints
-      
+      # Optionally set these repo secrets if you have custom endpoints
       NOC_SOURCE_FORMAT: ${{ secrets.NOC_SOURCE_FORMAT }}   # "csv" | "json" | "auto"
       IRCC_CATEGORIES_URL: ${{ secrets.IRCC_CATEGORIES_URL }}
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -35,7 +35,7 @@ jobs:
 
       - run: npm ci
 
-      # --- BEFORE: capture current URL for comparison ---
+      # --- BEFORE: capture current URL and IRCC shape ---
       - name: Capture current NOC CSV URL (before sync)
         id: old_noc_url
         shell: bash
@@ -49,13 +49,27 @@ jobs:
           echo "url=$OLD_URL" >> "$GITHUB_OUTPUT"
           echo "OLD_URL=$OLD_URL"
 
+      - name: Capture IRCC categories shape (before)
+        id: cats_before
+        shell: bash
+        run: |
+          set -e
+          if [ -f data/noc.categories.json ]; then
+            NODE_JS="const fs=require('fs');let d={};try{d=JSON.parse(fs.readFileSync('data/noc.categories.json','utf8'))}catch(e){};const g=d&&d.groups&&typeof d.groups==='object'?d.groups:{};const keys=Object.keys(g).sort();const counts=Object.fromEntries(keys.map(k=>[k,Array.isArray(g[k])?g[k].length:0]));const out={keys,counts};process.stdout.write(Buffer.from(JSON.stringify(out)).toString('base64'));"
+            SHAPE_B64=$(node -e "$NODE_JS")
+          else
+            SHAPE_B64=""
+          fi
+          echo "shape_b64=$SHAPE_B64" >> "$GITHUB_OUTPUT"
+          echo "IRCC_BEFORE_LEN=${#SHAPE_B64}"
+
       - name: Sync NOC & categories
         run: npm run sync:all
 
       - name: Validate JSON
         run: node scripts/validate_noc.mjs
 
-      # --- AFTER: capture new URL and compare ---
+      # --- AFTER: capture new URL and IRCC shape ---
       - name: Capture new NOC CSV URL (after sync)
         id: new_noc_url
         shell: bash
@@ -64,6 +78,68 @@ jobs:
           NEW_URL="$(node -e "const fs=require('fs');const p='data/noc.2021.json';try{const d=JSON.parse(fs.readFileSync(p,'utf8'));process.stdout.write(d?.source?.url||'')}catch(e){process.stdout.write('')}")"
           echo "url=$NEW_URL" >> "$GITHUB_OUTPUT"
           echo "NEW_URL=$NEW_URL"
+
+      - name: Capture IRCC categories shape (after)
+        id: cats_after
+        shell: bash
+        run: |
+          set -e
+          NODE_JS="const fs=require('fs');let d={};try{d=JSON.parse(fs.readFileSync('data/noc.categories.json','utf8'))}catch(e){};const g=d&&d.groups&&typeof d.groups==='object'?d.groups:{};const keys=Object.keys(g).sort();const counts=Object.fromEntries(keys.map(k=>[k,Array.isArray(g[k])?g[k].length:0]));const out={keys,counts};process.stdout.write(Buffer.from(JSON.stringify(out)).toString('base64'));"
+          SHAPE_B64=$(node -e "$NODE_JS")
+          echo "shape_b64=$SHAPE_B64" >> "$GITHUB_OUTPUT"
+          echo "IRCC_AFTER_LEN=${#SHAPE_B64}"
+
+      # --- Alerts ---
+      - name: Open Issue if IRCC categories shape changed
+        if: ${{ steps.cats_before.outputs.shape_b64 != '' && steps.cats_after.outputs.shape_b64 != '' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            function decode(b64){ try { return JSON.parse(Buffer.from(b64,'base64').toString('utf8')); } catch { return {}; } }
+            const before = decode('${{ steps.cats_before.outputs.shape_b64 }}');
+            const after  = decode('${{ steps.cats_after.outputs.shape_b64  }}');
+
+            const keysBefore = (before.keys || []).slice().sort();
+            const keysAfter  = (after.keys  || []).slice().sort();
+
+            const removed = keysBefore.filter(k => !keysAfter.includes(k));
+            const added   = keysAfter.filter(k => !keysBefore.includes(k));
+
+            const countsBefore = before.counts || {};
+            const countsAfter  = after.counts  || {};
+
+            // Any group that went from >0 to 0
+            const becameEmpty = keysAfter.filter(k => (countsBefore[k]||0) > 0 && (countsAfter[k]||0) === 0);
+
+            // 🔔 Also alert on ANY code-count change (+/-1, etc.)
+            const allKeys = Array.from(new Set([...keysBefore, ...keysAfter])).sort();
+            const changedCounts = allKeys.filter(k => (countsBefore[k]||0) !== (countsAfter[k]||0));
+
+            if (removed.length || becameEmpty.length || changedCounts.length) {
+              const countChanges = changedCounts.map(k => `- ${k}: ${(countsBefore[k]||0)} → ${(countsAfter[k]||0)}`).join('\n');
+
+              const lines = [
+                'IRCC categories **changed**.',
+                '',
+                removed.length ? `- Removed groups: ${removed.join(', ')}` : '',
+                added.length   ? `- Added groups (FYI): ${added.join(', ')}` : '',
+                becameEmpty.length ? `- Became empty: ${becameEmpty.join(', ')}` : '',
+                changedCounts.length ? `- Count changes:\n${countChanges}` : '',
+                '',
+                `Run: ${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`,
+                `Date (UTC): ${new Date().toISOString()}`
+              ].filter(Boolean).join('\n');
+
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: 'IRCC categories changed',
+                labels: ['automated','rules','ircc'],
+                body: lines
+              });
+            } else {
+              core.info('IRCC categories unchanged.');
+            }
 
       - name: Open Issue if NOC CSV URL changed
         if: ${{ steps.old_noc_url.outputs.url != '' && steps.new_noc_url.outputs.url != '' && steps.old_noc_url.outputs.url != steps.new_noc_url.outputs.url }}
