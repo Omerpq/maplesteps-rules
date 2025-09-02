@@ -20,7 +20,7 @@ jobs:
     env:
       NODE_OPTIONS: --max-old-space-size=2048
       # Optional: set these repo Secrets if/when you wire real endpoints
-      NOC_SOURCE_URL: ${{ secrets.NOC_SOURCE_URL }}
+      
       NOC_SOURCE_FORMAT: ${{ secrets.NOC_SOURCE_FORMAT }}   # "csv" | "json" | "auto"
       IRCC_CATEGORIES_URL: ${{ secrets.IRCC_CATEGORIES_URL }}
     steps:
