@@ -160,7 +160,12 @@ async function main() {
     schema_version: 1,
     last_checked: today,
     items,
-    source: { name: "NOC 2021 (ESDC/StatCan)", retrieved_at: retrieved_at || new Date().toISOString() }
+      source: {
+    name: "NOC 2021 (ESDC/StatCan)",
+    url: NOC_SOURCE_URL || existing?.source?.url || undefined,
+
+    retrieved_at: retrieved_at || new Date().toISOString()
+  }
   };
 
 // CI no-churn: if only dates changed and items are identical, skip writing to avoid noisy commits

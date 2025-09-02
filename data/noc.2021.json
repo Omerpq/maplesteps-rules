@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "last_checked": "2025-09-01",
+  "last_checked": "2025-09-02",
   "items": [
     {
       "code": "00010",
@@ -9511,6 +9511,7 @@
   ],
   "source": {
     "name": "NOC 2021 (ESDC/StatCan)",
-    "retrieved_at": "2025-09-01T09:06:47.291Z"
+    "url": "https://www.statcan.gc.ca/en/subjects/standard/noc/2021/indexV1/noc-2021-v1.0-elements.csv",
+    "retrieved_at": "2025-09-02T07:05:02.249Z"
   }
 }
