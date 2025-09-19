@@ -12,6 +12,7 @@ import {
   generateKeywords,
   stableSortByCode
 } from "./lib/normalizers.mjs";
+import * as cheerio from "cheerio";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,6 +22,9 @@ const today = new Date().toISOString().slice(0, 10);
 
 const NOC_SOURCE_URL = process.env.NOC_SOURCE_URL || "";           // plug later
 const NOC_SOURCE_FORMAT = (process.env.NOC_SOURCE_FORMAT || "auto").toLowerCase(); // csv|json|auto
+const NOC_DISCOVERY_URL =
+  process.env.NOC_DISCOVERY_URL ||
+  "https://www.statcan.gc.ca/en/subjects/standard/noc/2021/indexV1";
 
 function pretty(obj) { return JSON.stringify(obj, null, 2) + "\n"; }
 
@@ -123,15 +127,43 @@ function deepEqual(a, b) {
   return JSON.stringify(a) === JSON.stringify(b);
 }
 
+async function fetchHtml(url, { timeoutMs = 20000 } = {}) {
+  const ctl = new AbortController();
+  const t = setTimeout(() => ctl.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, { redirect: "follow", signal: ctl.signal, headers: { "Accept": "text/html" } });
+    if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+    return await res.text();
+  } finally { clearTimeout(t); }
+}
+
+async function discoverCsvUrl() {
+  try {
+    const html = await fetchHtml(NOC_DISCOVERY_URL);
+    const $ = cheerio.load(html);
+    // Look for the "Elements (CSV" link
+    const link = $("a").filter((_, a) => /Elements\s*\(CSV/i.test($(a).text())).first();
+    const href = link.attr("href");
+    if (href && /^https?:/i.test(href)) return href;
+    if (href) {
+      const u = new URL(NOC_DISCOVERY_URL);
+      return new URL(href, `${u.protocol}//${u.host}`).href;
+    }
+  } catch (_) {}
+  return null;
+}
 
 async function main() {
   const existing = await readExisting();
   let items = null;
   let retrieved_at = null;
+  const sourceUrl =
+    NOC_SOURCE_URL || (await discoverCsvUrl()) || existing?.source?.url || "";
 
-  if (NOC_SOURCE_URL.startsWith("http")) {
+    if (sourceUrl.startsWith("http")) {
     try {
-      const { buf, ct, retrievedAt } = await fetchBuffer(NOC_SOURCE_URL);
+      const { buf, ct, retrievedAt } = await fetchBuffer(sourceUrl);
+
       retrieved_at = retrievedAt;
       const records = await parseAuto(buf, ct);
       items = toItems(records);
@@ -162,12 +194,11 @@ async function main() {
     items,
       source: {
     name: "NOC 2021 (ESDC/StatCan)",
-    url: NOC_SOURCE_URL || existing?.source?.url || undefined,
+    url: sourceUrl || existing?.source?.url || undefined,
 
     retrieved_at: retrieved_at || new Date().toISOString()
   }
   };
-
 // CI no-churn: if only dates changed and items are identical, skip writing to avoid noisy commits
 if (process.env.CI && existing && deepEqual(existing.items, items)) {
   console.log("[noc] CI: items unchanged → skipping write");
