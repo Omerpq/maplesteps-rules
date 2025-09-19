@@ -1,0 +1,36 @@
+name: NOC Sync
+
+on:
+  workflow_dispatch:
+    inputs:
+      codes:
+        description: "Comma-separated NOC codes"
+        required: true
+        default: "31110,21231"
+  schedule:
+    - cron: "17 3 * * 1"  # weekly, Mon 03:17 UTC
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node -e "require('fs').mkdirSync('scripts',{recursive:true})"
+      - name: Write sync script
+        run: |
+          cat > scripts/sync-noc.js <<'EOF'
+          # (paste the entire sync-noc.js content here exactly)
+          EOF
+      - run: node scripts/sync-noc.js
+        env:
+          CODES: ${{ github.event.inputs.codes || '31110,21231' }}
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(noc): sync ${{ github.event.inputs.codes || '31110,21231' }}"
+          file_pattern: noc/2021/*
