@@ -20,13 +20,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: node -e "require('fs').mkdirSync('scripts',{recursive:true})"
-      - name: Write sync script
-        run: |
-          cat > scripts/sync-noc.js <<'EOF'
-          # (paste the entire sync-noc.js content here exactly)
-          EOF
-      - run: node scripts/sync-noc.js
+      - run: node scripts/sync-noc.mjs
         env:
           CODES: ${{ github.event.inputs.codes || '31110,21231' }}
       - name: Commit changes
