@@ -20,9 +20,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: node scripts/sync-noc.mjs
+
+      # 1) Fetch duties JSON for the requested codes (populates noc/2021/*.json)
+      - name: Fetch NOC duties for requested codes
+        run: node scripts/fetch_noc.mjs
         env:
           CODES: ${{ github.event.inputs.codes || '31110,21231' }}
+
+      # 2) Build manifest (writes noc/2021/index.json)
+      - name: Build manifest
+        run: node scripts/sync-noc.mjs
+
+      # 3) Commit any changes to noc/2021/*
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
