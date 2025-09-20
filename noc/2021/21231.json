@@ -2,5 +2,12 @@
   "code": "21231",
   "title": "Software engineers and designers",
   "teer": "1",
-  "mainDuties": []
+  "mainDuties": [
+    "Collect and document users' requirements and develop logical and physical specifications",
+    "Research, evaluate and synthesize technical information to design, develop and test computer-based systems including mobile applications",
+    "Develop data, process and network models to optimize architecture and to evaluate the performance and reliability of designs",
+    "Plan, design and coordinate the development, installation, integration and operation of computer-based systems including mobile applications",
+    "Assess, test, troubleshoot, document, upgrade and develop maintenance procedures for operating systems, communications environments and applications software",
+    "May lead and coordinate teams of information systems professionals in the development of software and integrated information systems, process control software and other embedded software control systems."
+  ]
 }
