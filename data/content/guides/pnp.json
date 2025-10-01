@@ -1,0 +1,128 @@
+{
+  "version": "2025-10-01",
+  "categories": [
+    { "id": "express_entry", "title": "Express Entry–aligned" },
+    { "id": "job_offer_opt", "title": "Job offer required/optional" },
+    { "id": "tech", "title": "Tech / IT" },
+    { "id": "health", "title": "Health / Nursing" },
+    { "id": "trades", "title": "Skilled trades" },
+    { "id": "french", "title": "Francophone" },
+    { "id": "intl_student", "title": "International students / graduates" },
+    { "id": "in_demand", "title": "In-demand / occupation lists" },
+    { "id": "connection", "title": "Provincial connection / ties" }
+  ],
+  "streams": [
+    {
+      "id": "on_hcp",
+      "province": "Ontario",
+      "title": "OINP — Human Capital Priorities (EE)",
+      "categories": ["express_entry", "in_demand"],
+      "hints": ["CLB ≥ 7 (FSW), ≥ 5 (CEC)", "Targeted tech rounds possible"],
+      "officialUrl": "https://www.ontario.ca/page/ontario-immigrant-nominee-program-human-capital-priorities-stream"
+    },
+    {
+      "id": "on_french_sfsw",
+      "province": "Ontario",
+      "title": "OINP — French-Speaking Skilled Worker (EE)",
+      "categories": ["express_entry", "french"],
+      "hints": ["French CLB ≥ 7 + English CLB ≥ 6"],
+      "officialUrl": "https://www.ontario.ca/page/ontario-immigrant-nominee-program-french-speaking-skilled-worker-stream"
+    },
+    {
+      "id": "bc_tech",
+      "province": "British Columbia",
+      "title": "BC PNP — Tech",
+      "categories": ["in_demand", "tech", "job_offer_opt"],
+      "hints": ["12-month job offer in eligible tech occupation", "Competitive wage & employer requirements"],
+      "officialUrl": "https://www.welcomebc.ca/Immigrate-to-B-C/BC-PNP-Tech"
+    },
+    {
+      "id": "bc_ee_skilled",
+      "province": "British Columbia",
+      "title": "BC PNP — EE Skilled Worker",
+      "categories": ["express_entry", "job_offer_opt"],
+      "hints": ["Full-time indeterminate job offer", "NOC TEER 0-3 typically"],
+      "officialUrl": "https://www.welcomebc.ca/Immigrate-to-B-C/Skills-Immigration/Express-Entry-BC/EEBC-Skilled-Worker"
+    },
+    {
+      "id": "ab_aaip_ee",
+      "province": "Alberta",
+      "title": "Alberta Advantage Immigration Program — Express Entry",
+      "categories": ["express_entry", "in_demand", "connection"],
+      "hints": ["Profiles selected by Alberta", "Occupation demand & ties (study/work/relative) help"],
+      "officialUrl": "https://www.alberta.ca/ainp-alberta-express-entry-stream"
+    },
+    {
+      "id": "sk_oid",
+      "province": "Saskatchewan",
+      "title": "SINP — Occupations In-Demand",
+      "categories": ["in_demand"],
+      "hints": ["No job offer required", "Eligible occupation list applies"],
+      "officialUrl": "https://www.saskatchewan.ca/residents/moving-to-saskatchewan/immigrating-to-saskatchewan/saskatchewan-immigrant-nominee-program/international-skilled-worker/isw-occupations-in-demand"
+    },
+    {
+      "id": "sk_ee",
+      "province": "Saskatchewan",
+      "title": "SINP — Express Entry",
+      "categories": ["express_entry", "in_demand"],
+      "hints": ["Express Entry profile + eligible occupation list"],
+      "officialUrl": "https://www.saskatchewan.ca/residents/moving-to-saskatchewan/immigrating-to-saskatchewan/saskatchewan-immigrant-nominee-program/international-skilled-worker/isw-express-entry"
+    },
+    {
+      "id": "mb_swo",
+      "province": "Manitoba",
+      "title": "MPNP — Skilled Worker Overseas",
+      "categories": ["connection", "in_demand"],
+      "hints": ["Strong ties to Manitoba (family/friends/invitation) highly relevant"],
+      "officialUrl": "https://www.immigratemanitoba.com/skilled-worker-overseas/"
+    },
+    {
+      "id": "ns_lmp",
+      "province": "Nova Scotia",
+      "title": "NSNP — Labour Market Priorities (EE)",
+      "categories": ["express_entry", "in_demand", "health"],
+      "hints": ["NS selects profiles from EE based on targeted criteria (e.g., nurses, educators)"],
+      "officialUrl": "https://novascotiaimmigration.com/move-here/nova-scotia-labour-market-priorities/"
+    },
+    {
+      "id": "nb_skilled_worker",
+      "province": "New Brunswick",
+      "title": "NBPNP — Skilled Worker",
+      "categories": ["job_offer_opt", "connection"],
+      "hints": ["Employer support or ties often required", "Info sessions helpful"],
+      "officialUrl": "https://www.wnb.ca/content/gnb/en/corporate/promo/immigration/immigratenb/skilledworker.html"
+    },
+    {
+      "id": "pei_ee",
+      "province": "Prince Edward Island",
+      "title": "PEI PNP — Express Entry",
+      "categories": ["express_entry", "job_offer_opt"],
+      "hints": ["Job offer not strictly mandatory but greatly beneficial in practice"],
+      "officialUrl": "https://www.princeedwardisland.ca/en/information/office-of-immigration/pei-express-entry"
+    },
+    {
+      "id": "nl_priority_skills",
+      "province": "Newfoundland and Labrador",
+      "title": "NLPNP — Priority Skills NL",
+      "categories": ["in_demand", "tech", "health"],
+      "hints": ["In-demand tech/health researchers and professionals"],
+      "officialUrl": "https://www.gov.nl.ca/immigration/priority-skills/"
+    },
+    {
+      "id": "yt_critical_skills",
+      "province": "Yukon",
+      "title": "YNP — Critical Impact Worker / Skilled Worker",
+      "categories": ["job_offer_opt", "in_demand"],
+      "hints": ["Employer-driven with job offer in NOC TEER 0-5 (path varies)"],
+      "officialUrl": "https://yukon.ca/en/immigrate-yukon"
+    },
+    {
+      "id": "nt_nominee",
+      "province": "Northwest Territories",
+      "title": "NTNP — Employer-Driven / Express Entry",
+      "categories": ["job_offer_opt", "express_entry"],
+      "hints": ["Job offer & employer criteria", "EE-aligned option available"],
+      "officialUrl": "https://www.immigratenwt.ca/"
+    }
+  ]
+}
