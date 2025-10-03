@@ -1,0 +1,78 @@
+﻿{
+  "version": "v1",
+  "sections": [
+    {
+      "id": "personal",
+      "title": "Identity & Forms",
+      "docs": [
+        { "id": "passport", "title": "Passport(s) - biodata page", "required": true, "officialLink": "https://www.canada.ca/en/immigration-refugees-citizenship/services/application.html" },
+        { "id": "digital_photo", "title": "Digital photograph (PR)", "required": true, "officialLink": "https://www.canada.ca/en/immigration-refugees-citizenship/services/application/photograph-requirements.html" },
+        { "id": "forms", "title": "IMM forms generated in e-APR", "required": true }
+      ]
+    },
+    {
+      "id": "education",
+      "title": "Education (ECA + credentials)",
+      "docs": [
+        { "id": "eca_report", "title": "ECA report (PDF or reference no.)", "required": true, "officialLink": "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/education-assessed.html" },
+        { "id": "degrees", "title": "Degree/diploma certificates", "required": true },
+        { "id": "transcripts", "title": "Transcripts (if requested)", "required": false }
+      ]
+    },
+    {
+      "id": "language",
+      "title": "Language test results",
+      "docs": [
+        { "id": "language_pdf", "title": "IELTS/CELPIP/TEF/TCF score report", "required": true, "officialLink": "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/language-test-results.html" }
+      ]
+    },
+    {
+      "id": "work",
+      "title": "Work experience",
+      "docs": [
+        { "id": "reference_letters", "title": "Employer reference letters (per NOC)", "required": true, "officialLink": "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/work-experience.html" },
+        { "id": "payslips", "title": "Pay slips / proofs (as applicable)", "required": false },
+        { "id": "taxdocs", "title": "Tax records (as applicable)", "required": false }
+      ]
+    },
+    {
+      "id": "pof",
+      "title": "Proof of funds",
+      "docs": [
+        { "id": "six_months_statements", "title": "Six-month bank/equity statements", "required": true, "officialLink": "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/documents/proof-funds.html" },
+        { "id": "gift_deed", "title": "Gift deed / affidavit (if used)", "required": false }
+      ]
+    },
+    {
+      "id": "police_medical",
+      "title": "Police certificates & medical",
+      "docs": [
+        { "id": "police_certs", "title": "Police certificates (each country, if needed)", "required": true, "officialLink": "https://www.canada.ca/en/immigration-refugees-citizenship/services/application/police-certificates.html" },
+        { "id": "medical", "title": "Upfront medical exam (if applicable)", "required": false, "officialLink": "https://www.canada.ca/en/immigration-refugees-citizenship/services/application/medical-police/medical-exams.html" }
+      ]
+    },
+    {
+      "id": "photos_sign",
+      "title": "Photos & signatures",
+      "docs": [
+        { "id": "photos", "title": "Digital photos (per applicant)", "required": true, "officialLink": "https://www.canada.ca/en/immigration-refugees-citizenship/services/application/photograph-requirements.html" },
+        { "id": "signatures", "title": "Signed forms (as directed by portal)", "required": true }
+      ]
+    },
+    {
+      "id": "optional",
+      "title": "Other/Optional",
+      "docs": [
+        { "id": "loe", "title": "Letter of explanation (LoE)", "required": false },
+        { "id": "translations", "title": "Certified translations (if any doc not in English/French)", "required": false, "officialLink": "https://www.canada.ca/en/immigration-refugees-citizenship/services/application/application-forms-guides/use-certified-translator.html" }
+      ]
+    }
+  ],
+  "tips": [
+    "Combine pages into a single PDF per document where possible (avoid multiple uploads for one requirement).",
+    "Scan in grayscale at a reasonable DPI (e.g., 150–200) to keep file sizes practical while maintaining legibility.",
+    "Flatten and reduce PDF size using 'Save as Reduced Size PDF' or equivalent before upload.",
+    "Ensure names and dates are clearly visible; avoid cropped or skewed scans.",
+    "Keep filenames meaningful (e.g., work_ref_ABC_Ltd_2019-2022.pdf)."
+  ]
+}
