@@ -1,16 +1,70 @@
 {
-  "version": "REMOTE-TEST",
-  "last_checked": "2025-08-09T00:00:00Z",
+  "version": "2025-10-08",
+  "last_checked": "2025-10-08T12:41:38.684Z",
   "source_urls": [
     "https://www.canada.ca/en/immigration-refugees-citizenship/corporate/publications-manuals/operational-bulletins-manuals.html"
   ],
   "changes": [
     {
-      "date": "2025-08-05",
-      "section": "Express Entry \u2014 category-based selection",
-      "summary": "Updated guidance on STEM category eligibility examples.",
-      "url": "https://www.canada.ca/.../pdi-update-2025-08-05.html"
+      "date": null,
+      "section": "Subscribe via RSS",
+      "summary": "Updated: Subscribe via RSS",
+      "url": "https://www.canada.ca/content/dam/ircc/migration/ircc/rss/rss-oper-e.xml"
+    },
+    {
+      "date": null,
+      "section": "What is RSS?",
+      "summary": "Updated: What is RSS?",
+      "url": "https://www.canada.ca/en/immigration-refugees-citizenship/news/rss/help.html"
+    },
+    {
+      "date": null,
+      "section": "Updates to Program Delivery Instructions",
+      "summary": "Updated: Updates to Program Delivery Instructions",
+      "url": "https://www.canada.ca/en/immigration-refugees-citizenship/corporate/publications-manuals/operational-bulletins-manuals/updates.html"
+    },
+    {
+      "date": null,
+      "section": "Refugee Protection",
+      "summary": "Updated: Refugee Protection",
+      "url": "https://www.canada.ca/en/immigration-refugees-citizenship/corporate/publications-manuals/operational-bulletins-manuals/refugee-protection.html"
+    },
+    {
+      "date": null,
+      "section": "Temporary Resident Program",
+      "summary": "Updated: Temporary Resident Program",
+      "url": "https://www.canada.ca/en/immigration-refugees-citizenship/corporate/publications-manuals/operational-bulletins-manuals/temporary-residents.html"
+    },
+    {
+      "date": null,
+      "section": "Citizenship",
+      "summary": "Updated: Citizenship",
+      "url": "https://www.canada.ca/en/immigration-refugees-citizenship/corporate/publications-manuals/operational-bulletins-manuals/canadian-citizenship.html"
+    },
+    {
+      "date": null,
+      "section": "Permanent Residence",
+      "summary": "Updated: Permanent Residence",
+      "url": "https://www.canada.ca/en/immigration-refugees-citizenship/corporate/publications-manuals/operational-bulletins-manuals/permanent-residence.html"
+    },
+    {
+      "date": null,
+      "section": "Standard requirements",
+      "summary": "Updated: Standard requirements",
+      "url": "https://www.canada.ca/en/immigration-refugees-citizenship/corporate/publications-manuals/operational-bulletins-manuals/standard-requirements.html"
+    },
+    {
+      "date": null,
+      "section": "Language requirements",
+      "summary": "Updated: Language requirements",
+      "url": "https://www.canada.ca/en/immigration-refugees-citizenship/corporate/publications-manuals/operational-bulletins-manuals/standard-requirements/language-requirements.html"
+    },
+    {
+      "date": null,
+      "section": "Medical requirements",
+      "summary": "Updated: Medical requirements",
+      "url": "https://www.canada.ca/en/immigration-refugees-citizenship/corporate/publications-manuals/operational-bulletins-manuals/standard-requirements/medical-requirements.html"
     }
   ],
-  "checksum": "sha256:DEMO"
+  "checksum": "sha256:TBD"
 }
