@@ -17,26 +17,53 @@ const ALLOW = [
   "www.ontario.ca", "ontario.ca", "www.serviceontario.ca",
   "www2.gov.bc.ca", "www.welcomebc.ca", "icbc.com", "www.icbc.com",
   "www.alberta.ca", "alberta.ca",
-  "www.gov.mb.ca", "gov.mb.ca", "www.mpi.mb.ca", "mpi.mb.ca"
+  "www.gov.mb.ca", "gov.mb.ca", "www.mpi.mb.ca", "mpi.mb.ca", "immigratemanitoba.com",
+"alis.alberta.ca", "www.gov.bc.ca",
 ];
 
 function getHost(u) { try { return new URL(u).host.toLowerCase(); } catch { return ""; } }
 
 function fetchHeadOrGet(url) {
-  // Use GET to follow redirects reliably; don’t download bodies (abort after headers)
+  // Use GET (follows redirects at the CDN) and set a real UA to avoid WAF blocks (e.g., Ontario, BC).
   return new Promise((resolve) => {
-    const req = https.get(url, { method: "GET", timeout: 15000 }, (res) => {
-      resolve({ status: res.statusCode || 0 });
-      res.resume(); // discard body
+    const req = https.get(
+      url,
+      {
+        method: "GET",
+        timeout: 15000,
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36",
+          Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+          "Cache-Control": "no-cache",
+          Pragma: "no-cache",
+        },
+      },
+      (res) => {
+        resolve({ status: res.statusCode || 0 });
+        res.resume(); // discard body
+      }
+    );
+    req.on("timeout", () => {
+      req.destroy();
+      resolve({ status: 0 });
     });
-    req.on("timeout", () => { req.destroy(); resolve({ status: 0 }); });
     req.on("error", () => resolve({ status: 0 }));
   });
 }
 
+
 (async () => {
-  const raw = fs.readFileSync(FILE, "utf8");
-  const json = JSON.parse(raw);
+  // Read JSON, strip BOM and whitespace (Windows may add BOM)
+const raw = fs.readFileSync(FILE, "utf8").replace(/^\uFEFF/, "").trim();
+let json;
+try {
+  json = JSON.parse(raw);
+} catch (e) {
+  console.error("Could not parse landing.json. First 120 chars:\n", raw.slice(0, 120));
+  throw e;
+}
+
 
   const problems = [];
   const rows = [];
