@@ -1,4 +1,4 @@
-﻿name: Nightly landing link check
+name: Nightly landing link check
 
 on:
   schedule:
@@ -16,4 +16,4 @@ jobs:
         with:
           node-version: "20"
       - name: Run checker
-        run: node scripts/check-landing.js
+        run: node scripts/check-landing.cjs
