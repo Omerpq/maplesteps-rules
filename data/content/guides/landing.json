@@ -1,0 +1,61 @@
+﻿{
+  "id": "landing",
+  "version": "v1",
+  "title": "Landing & Post-Landing Checklist",
+  "provinces": [
+    {
+      "code": "ON",
+      "name": "Ontario",
+      "tasks": [
+        { "id": "sin", "title": "Apply for SIN (Service Canada)", "officialLink": "https://www.canada.ca/en/employment-social-development/services/sin/apply.html", "required": true },
+        { "id": "health", "title": "Apply for OHIP (Ontario Health Insurance Plan)", "officialLink": "https://www.ontario.ca/page/apply-ohip-and-get-health-card", "required": true },
+        { "id": "bank", "title": "Open a bank account & set up direct deposit", "officialLink": "https://www.canada.ca/en/services/finance/manage.html", "required": false },
+        { "id": "address", "title": "Update mailing address with IRCC (PR card delivery)", "officialLink": "https://www.canada.ca/en/immigration-refugees-citizenship/services/application/change-address.html", "required": true },
+        { "id": "healthcard_pickup", "title": "Pick up / receive health card & confirm coverage start", "required": false },
+        { "id": "driver_exchange", "title": "Exchange/convert driver’s licence (ServiceOntario)", "officialLink": "https://www.ontario.ca/page/exchange-out-province-drivers-licence", "required": false },
+        { "id": "settlement", "title": "Find free settlement services (Ontario newcomer)", "officialLink": "https://www.ontario.ca/page/newcomers", "required": false }
+      ]
+    },
+    {
+      "code": "BC",
+      "name": "British Columbia",
+      "tasks": [
+        { "id": "sin", "title": "Apply for SIN (Service Canada)", "officialLink": "https://www.canada.ca/en/employment-social-development/services/sin/apply.html", "required": true },
+        { "id": "health", "title": "Apply for MSP (BC Medical Services Plan)", "officialLink": "https://www2.gov.bc.ca/gov/content/health/health-drug-coverage/msp/bc-residents", "required": true },
+        { "id": "bank", "title": "Open a bank account & set up direct deposit", "officialLink": "https://www.canada.ca/en/services/finance/manage.html", "required": false },
+        { "id": "address", "title": "Update mailing address with IRCC (PR card delivery)", "officialLink": "https://www.canada.ca/en/immigration-refugees-citizenship/services/application/change-address.html", "required": true },
+        { "id": "driver_exchange", "title": "Exchange/convert driver’s licence (ICBC)", "officialLink": "https://www.icbc.com/driver-licensing/moving-bc/Pages/Moving-from-another-country.aspx", "required": false },
+        { "id": "settlement", "title": "Find settlement services (WelcomeBC)", "officialLink": "https://www.welcomebc.ca/Start-Your-Life-in-B-C", "required": false }
+      ]
+    },
+    {
+      "code": "AB",
+      "name": "Alberta",
+      "tasks": [
+        { "id": "sin", "title": "Apply for SIN (Service Canada)", "officialLink": "https://www.canada.ca/en/employment-social-development/services/sin/apply.html", "required": true },
+        { "id": "health", "title": "Apply for AHCIP (Alberta Health Care)", "officialLink": "https://www.alberta.ca/ahcip-how-to-apply", "required": true },
+        { "id": "bank", "title": "Open a bank account & set up direct deposit", "officialLink": "https://www.canada.ca/en/services/finance/manage.html", "required": false },
+        { "id": "address", "title": "Update mailing address with IRCC (PR card delivery)", "officialLink": "https://www.canada.ca/en/immigration-refugees-citizenship/services/application/change-address.html", "required": true },
+        { "id": "driver_exchange", "title": "Exchange/convert driver’s licence (Alberta)", "officialLink": "https://www.alberta.ca/exchange-non-alberta-drivers-licence", "required": false },
+        { "id": "settlement", "title": "Find settlement services (Newcomers to Alberta)", "officialLink": "https://www.alberta.ca/newcomers.aspx", "required": false }
+      ]
+    },
+    {
+      "code": "MB",
+      "name": "Manitoba",
+      "tasks": [
+        { "id": "sin", "title": "Apply for SIN (Service Canada)", "officialLink": "https://www.canada.ca/en/employment-social-development/services/sin/apply.html", "required": true },
+        { "id": "health", "title": "Apply for Manitoba Health Card (MHSC)", "officialLink": "https://www.gov.mb.ca/health/mhsip/index.html", "required": true },
+        { "id": "bank", "title": "Open a bank account & set up direct deposit", "officialLink": "https://www.canada.ca/en/services/finance/manage.html", "required": false },
+        { "id": "address", "title": "Update mailing address with IRCC (PR card delivery)", "officialLink": "https://www.canada.ca/en/immigration-refugees-citizenship/services/application/change-address.html", "required": true },
+        { "id": "driver_exchange", "title": "Exchange/convert driver’s licence (MPI)", "officialLink": "https://www.mpi.mb.ca/Pages/moving-to-manitoba.aspx", "required": false },
+        { "id": "settlement", "title": "Find settlement services (Newcomers to Manitoba)", "officialLink": "https://immigratemanitoba.com/newcomers/", "required": false }
+      ]
+    }
+  ],
+  "global_tips": [
+    "Keep a secure copy of all documents in Vault.",
+    "Use your province’s official health plan page to verify eligibility/wait periods.",
+    "Most tasks can be started with passport + COPR; bring originals to appointments."
+  ]
+}
