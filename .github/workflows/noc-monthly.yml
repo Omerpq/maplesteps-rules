@@ -1,0 +1,76 @@
+name: NOC 2021 Monthly Refresh
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: "0 6 1 * *"   # 06:00 UTC on the 1st of every month
+
+permissions:
+  contents: write
+
+concurrency:
+  group: noc-monthly
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      # 1) Fetch latest NOC → data/noc.2021.json
+      - name: Fetch NOC 2021
+        run: node scripts/fetch_noc.mjs
+
+      # 2) Publish per-code files + index
+      - name: Publish per-code JSON
+        run: node scripts/publish_noc.mjs
+
+      # 3) Rebuild index from files (safety)
+      - name: Sync index map
+        run: node scripts/sync-noc.mjs
+
+      # 4) If ANY files changed, commit them
+      - name: Commit real changes (if any)
+        run: |
+          if git diff --quiet --exit-code; then
+            echo "NO_REAL_CHANGES=1" >> $GITHUB_ENV
+            exit 0
+          fi
+          git config user.name "maplesteps-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/noc.2021.json noc/2021/*
+          git commit -m "noc: update NOC 2021 data (monthly refresh)"
+          echo "PUSH_CHANGES=1" >> $GITHUB_ENV
+
+      # 5) If no real changes, bump last_checked so the app shows a fresh verification
+      - name: Bump last_checked only
+        if: env.NO_REAL_CHANGES == '1'
+        run: |
+          node - <<'NODE'
+          import { readFileSync, writeFileSync } from "node:fs";
+          const path = "data/noc.2021.json";
+          const j = JSON.parse(readFileSync(path, "utf8"));
+          j.last_checked = new Date().toISOString();
+          writeFileSync(path, JSON.stringify(j, null, 2) + "\n", "utf8");
+          console.log("Bumped last_checked to", j.last_checked);
+          NODE
+          git config user.name "maplesteps-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/noc.2021.json
+          git commit -m "noc: monthly verification (bump last_checked)"
+
+      - name: Push
+        uses: ad-m/github-push-action@v0.8.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
