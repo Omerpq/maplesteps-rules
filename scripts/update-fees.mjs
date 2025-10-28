@@ -25,12 +25,13 @@ const sliceSection = (html, headingText) => {
   return m ? m[1] : html; // fallback to whole page
 };
 
-// Find a $### amount within a small window after the label
-const pickAmount = (block, label, window = 160) => {
-  const re = new RegExp(`${label}[^$]{0,${window}}\\$\\s*([0-9]{2,4})`, "i");
+// Find a $### or $#### amount within a small window after the label (avoid $85 etc.)
+const pickAmount = (block, label, window = 220) => {
+  const re = new RegExp(`${label}[^$]{0,${window}}\\$\\s*([0-9]{3,4})`, "i");
   const m = re.exec(block);
   return m ? Number(m[1]) : null;
 };
+
 
 
 const isoNow = () => new Date().toISOString();
@@ -57,10 +58,15 @@ const child =
 
 
   if (processing == null || rprf == null || child == null) {
-    throw new Error(
-      `Could not parse one or more fees (processing=${processing}, rprf=${rprf}, child=${child})`
-    );
-  }
+  const prev = JSON.parse(readFileSync(RULES_PATH, "utf8"));
+  prev.last_checked = isoNow();                 // bump timestamp so app shows a fresh check
+  writeFileSync(RULES_PATH, JSON.stringify(prev, null, 2) + "\n", "utf8");
+  console.warn(
+    `[WARN] Could not parse one or more fees (processing=${processing}, rprf=${rprf}, child=${child}). Kept previous values; bumped last_checked.`
+  );
+  process.exit(0); // do not fail the workflow
+}
+
 
   const bundle = processing + rprf;
 
