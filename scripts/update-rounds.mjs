@@ -41,6 +41,12 @@ async function getLatestRoundFromIRCC(){
   if(max<0) throw new Error("No ee_rounds_###_en.json links found.");
   const jsonUrl = `https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_${max}_en.json`;
   const j = await fetchJson(jsonUrl);
+console.log("[DEBUG] url", jsonUrl);
+console.log("[DEBUG] keys", Object.keys(j));
+console.log("[DEBUG] sample", {
+  drawDate: j.drawDate, date: j.date, DrawDate: j.DrawDate, Draw_Date: j["Draw Date"],
+  publicationDate: j.publicationDate, roundDate: j.roundDate
+});
 
   const drawDate =
   j.drawDate ||
