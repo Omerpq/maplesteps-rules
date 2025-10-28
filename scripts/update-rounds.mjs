@@ -10,11 +10,15 @@ const IRCC_ROUNDS_PAGE =
   "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html";
 
 function iso(dateLike) {
-  const d = new Date(dateLike);
+  const d = new Date(dateLike ?? "");
+  if (Number.isNaN(d.getTime())) {
+    throw new Error(`Unparsable draw date from IRCC JSON: ${JSON.stringify(dateLike)}`);
+  }
   return new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()))
     .toISOString()
-    .slice(0, 10);
+    .slice(0, 10); // YYYY-MM-DD
 }
+
 function num(x){ if(x==null) return null; const n=Number(String(x).replace(/[^\d.-]/g,"")); return Number.isFinite(n)?n:null; }
 function pickCategory(t=""){ t=t.toLowerCase();
   if(t.includes("provincial nominee")) return "Provincial Nominee Program (PNP)";
@@ -38,7 +42,19 @@ async function getLatestRoundFromIRCC(){
   const jsonUrl = `https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_${max}_en.json`;
   const j = await fetchJson(jsonUrl);
 
-  const drawDate = j.drawDate || j.date || j["Draw Date"];
+  const drawDate =
+  j.drawDate ||
+  j.date ||
+  j.DrawDate ||
+  j["Draw Date"] ||
+  j["draw_date"] ||
+  j["draw_date_en"] ||
+  j["date_en"] ||
+  j["Date"] ||
+  j["Date en"] ||
+  j["en_draw_date"] ||
+  j["enDate"];
+
   const name = j.drawName || j.drawCategory || j.program || "";
   const type = j.drawType || j.category || j.roundCategory || "";
   const size = j.drawSize || j.numberInvited || j.invitations || j.ita || null;
