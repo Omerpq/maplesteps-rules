@@ -2,6 +2,18 @@
   "schema_version": "1.0",
   "entries": [
     {
+      "date": "2025-10-28",
+      "category": "General (no program specified)",
+      "crs_cutoff": 533,
+      "invitations": 1000,
+      "draw_number": 375,
+      "source_urls": [
+        "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
+        "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
+      ],
+      "last_checked": "2025-10-28T16:36:36.452Z"
+    },
+    {
       "date": "2025-10-27",
       "category": "Provincial Nominee Program (PNP)",
       "crs_cutoff": 761,
