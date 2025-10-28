@@ -2,15 +2,16 @@
   "schema_version": "1.0",
   "entries": [
     {
-      "date": "2025-08-08",
-      "category": "French language proficiency (Version 1)",
-      "crs_cutoff": 481,
-      "invitations": 2500,
-      "draw_number": 360,
-      "source_urls": [
-        "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
-      ],
-      "last_checked": "2025-08-10T12:16:15.327Z"
-    }
+  "date": "2025-10-15",
+  "category": "Healthcare and social services occupations",
+  "crs_cutoff": 472,
+  "invitations": 2500,
+  "draw_number": null,
+  "source_urls": [
+    "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html"
+  ],
+  "last_checked": "2025-10-28T00:00:00.000Z"
+}
+
   ]
 }
