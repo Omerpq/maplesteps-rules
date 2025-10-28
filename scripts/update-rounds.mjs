@@ -40,41 +40,34 @@ async function getLatestRoundFromIRCC(){
   let m, max=-1; while((m=re.exec(html))!==null){ const n=Number(m[1]); if(Number.isFinite(n)&&n>max) max=n; }
   if(max<0) throw new Error("No ee_rounds_###_en.json links found.");
   const jsonUrl = `https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_${max}_en.json`;
-  const j = await fetchJson(jsonUrl);
-console.log("[DEBUG] url", jsonUrl);
-console.log("[DEBUG] keys", Object.keys(j));
-console.log("[DEBUG] sample", {
-  drawDate: j.drawDate, date: j.date, DrawDate: j.DrawDate, Draw_Date: j["Draw Date"],
-  publicationDate: j.publicationDate, roundDate: j.roundDate
-});
+ const j = await fetchJson(jsonUrl);
 
-  const drawDate =
-  j.drawDate ||
-  j.date ||
-  j.DrawDate ||
-  j["Draw Date"] ||
-  j["draw_date"] ||
-  j["draw_date_en"] ||
-  j["date_en"] ||
-  j["Date"] ||
-  j["Date en"] ||
-  j["en_draw_date"] ||
-  j["enDate"];
+// IRCC shape now: { classes: [...], rounds: [ {...latest...}, ... ] }
+const arr = Array.isArray(j.rounds) ? j.rounds
+  : (Array.isArray(j.classes) && Array.isArray(j.classes[0]?.rounds) ? j.classes[0].rounds : []);
+if (!arr.length) throw new Error("IRCC JSON has no rounds array.");
 
-  const name = j.drawName || j.drawCategory || j.program || "";
-  const type = j.drawType || j.category || j.roundCategory || "";
-  const size = j.drawSize || j.numberInvited || j.invitations || j.ita || null;
-  const crs  = j.drawCRS  || j.crsCutoff     || j.cutoff_score || j.crs || null;
+const r = [...arr].sort((a,b) => new Date(b.drawDate || b.date || b.roundDate || b.publicationDate || 0) -
+                                 new Date(a.drawDate || a.date || a.roundDate || a.publicationDate || 0))[0];
 
-  const entry = {
-    date: iso(drawDate),
-    category: pickCategory(String(type || name)),
-    crs_cutoff: num(crs),
-    invitations: num(size),
-    draw_number: max,
-    source_urls: [IRCC_ROUNDS_PAGE, jsonUrl],
-    last_checked: new Date().toISOString(),
-  };
+const drawDate =
+  r.drawDate || r.date || r.roundDate || r.publicationDate || r["Draw Date"] || r["draw_date"] || r["Date"];
+const name = r.drawName || r.drawCategory || r.program || r.name || "";
+const type = r.drawType || r.category || r.roundCategory || r.type || "";
+const size = r.drawSize || r.numberInvited || r.invitations || r.ita || r.numberOfInvitationsIssued || null;
+const crs  = r.drawCRS  || r.crsCutoff     || r.cutoff_score || r.crs || r.crs_cutoff || null;
+const drawNo = r.drawNumber || r.roundNumber || r.number || max; // fall back to URL number
+
+const entry = {
+  date: iso(drawDate),
+  category: pickCategory(String(type || name)),
+  crs_cutoff: num(crs),
+  invitations: num(size),
+  draw_number: num(drawNo),
+  source_urls: [IRCC_ROUNDS_PAGE, jsonUrl],
+  last_checked: new Date().toISOString(),
+};
+
   if(!entry.date) throw new Error("Latest round has no parsable date.");
   return entry;
 }
