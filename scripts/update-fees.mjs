@@ -14,34 +14,47 @@ const fetchText = async (url) => {
   return r.text();
 };
 
-// pull first $### after a phrase (case-insensitive), returns number or null
-const findAmountAfter = (html, phrase) => {
-  const re = new RegExp(`${phrase}[^$]{0,120}?\\$(\\d{2,4})`, "i");
+// Limit parsing to a specific section by H2 heading text
+const sliceSection = (html, headingText) => {
+  const esc = headingText.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const re = new RegExp(
+    `<h2[^>]*>\\s*${esc}\\s*<\\/h2>([\\s\\S]*?)(?:<h2[^>]*>|$)`,
+    "i"
+  );
   const m = re.exec(html);
+  return m ? m[1] : html; // fallback to whole page
+};
+
+// Find a $### amount within a small window after the label
+const pickAmount = (block, label, window = 160) => {
+  const re = new RegExp(`${label}[^$]{0,${window}}\\$\\s*([0-9]{2,4})`, "i");
+  const m = re.exec(block);
   return m ? Number(m[1]) : null;
 };
+
 
 const isoNow = () => new Date().toISOString();
 
 (async () => {
   const html = await fetchText(IRCC_FEES_URL);
 
-  // Try multiple phrasings that IRCC uses from time to time
-  const processing =
-    findAmountAfter(html, "Processing fee\\s*\\(Express Entry\\)") ??
-    findAmountAfter(html, "Your application\\s*Processing fee") ??
-    findAmountAfter(html, "Permanent residence application\\s*processing fee") ??
-    null;
+  // Narrow to the correct section first
+const section = sliceSection(html, "Economic immigration (including Express Entry)");
 
-  const rprf =
-    findAmountAfter(html, "right of permanent residence fee") ??
-    findAmountAfter(html, "RPRF") ??
-    null;
+// Extract amounts only from that section (avoid picking unrelated $ values elsewhere)
+const processing =
+  pickAmount(section, "Processing fee\\s*\\(Express Entry\\)") ??
+  pickAmount(section, "Your application\\s*Processing fee") ??
+  pickAmount(section, "Permanent residence application\\s*processing fee");
 
-  const child =
-    findAmountAfter(html, "dependent child") ??
-    findAmountAfter(html, "Include a dependent child") ??
-    null;
+const rprf =
+  pickAmount(section, "right of permanent residence fee") ??
+  pickAmount(section, "RPRF");
+
+const child =
+  pickAmount(section, "dependent child") ??
+  pickAmount(section, "Include a dependent child");
+
 
   if (processing == null || rprf == null || child == null) {
     throw new Error(
