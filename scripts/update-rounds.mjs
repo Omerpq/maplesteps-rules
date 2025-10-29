@@ -25,6 +25,11 @@ function num(x) {
 }
 function pickCategory(t = "", name = "") {
   const s = `${t} ${name}`.toLowerCase();
+
+  // --- explicit program/category cases (order matters) ---
+  if (s.includes("canadian experience class") || /\bcec\b/.test(s)) {
+    return "Canadian Experience Class";
+  }
   if (s.includes("provincial nominee")) return "Provincial Nominee Program (PNP)";
   if (s.includes("french")) return "French language proficiency (Version 1)";
   if (s.includes("healthcare")) return "Healthcare and social services occupations";
@@ -32,9 +37,19 @@ function pickCategory(t = "", name = "") {
   if (s.includes("transport")) return "Transport occupations";
   if (s.includes("stem")) return "STEM occupations";
   if (s.includes("agriculture")) return "Agriculture and agri-food occupations";
+
+  // If IRCC label contains “general” or “no program specified”
+  if (s.includes("general") || s.includes("no program specified")) {
+    return "General (no program specified)";
+  }
+
+  // catch-all for category-based messaging that didn’t match above
   if (s.includes("category")) return "Category-based (unspecified)";
+
+  // fallback
   return "General (no program specified)";
 }
+
 async function fetchText(url) {
   const r = await fetch(url, { headers: { "user-agent": "MapleSteps-RulesBot/1.0" } });
   if (!r.ok) throw new Error(`HTTP ${r.status} ${url}`);

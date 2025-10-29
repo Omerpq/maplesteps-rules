@@ -1,6 +1,6 @@
 {
   "version": "2025-10-29",
-  "last_checked": "2025-10-29T18:42:41.493Z",
+  "last_checked": "2025-10-29T19:35:40.731Z",
   "source_urls": [
     "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
     "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
@@ -21,7 +21,7 @@
     },
     {
       "date": "2025-10-28",
-      "category": "General (no program specified)",
+      "category": "Canadian Experience Class",
       "invitations": 1000,
       "crs_cutoff": 533,
       "draw_number": 375,
@@ -86,7 +86,7 @@
     },
     {
       "date": "2025-10-01",
-      "category": "General (no program specified)",
+      "category": "Canadian Experience Class",
       "invitations": 1000,
       "crs_cutoff": 534,
       "draw_number": 370,
