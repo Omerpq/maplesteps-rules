@@ -1,51 +1,35 @@
-name: Update Rules JSON
+name: Update rules feed (rounds)
 
 on:
-  workflow_dispatch: {}
   schedule:
-    - cron: "17 */6 * * *"   # every 6 hours at :17
-
-permissions:
-  contents: write
-
-concurrency:
-  group: update-rules
-  cancel-in-progress: true
+    - cron: "0 6 * * *"   # daily 06:00 UTC
+  workflow_dispatch: {}
 
 jobs:
-  update:
+  update-rounds:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          persist-credentials: false
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "20"
 
-      - name: Update rounds (IRCC)
+      - name: Update rounds.remote.json (latest 12)
         run: node scripts/update-rounds.mjs
 
-      - name: Update fees (IRCC)
-        run: node scripts/update-fees.mjs
-
-      - name: Commit changes (if any)
+      - name: Commit & push if changed
         run: |
-          if git diff --quiet --exit-code; then
-            echo "No changes."
-            exit 0
+          if ! git diff --quiet -- data/rounds.remote.json; then
+            git config user.name  "rules-bot"
+            git config user.email "rules-bot@users.noreply.github.com"
+            git add data/rounds.remote.json
+            git commit -m "rules: refresh rounds.remote.json (auto, latest 12)"
+            git push
+          else
+            echo "No changes to commit."
           fi
-          git config user.name "maplesteps-bot"
-          git config user.email "bot@users.noreply.github.com"
-          git add data/rounds.remote.json data/fees.remote.json
-          git commit -m "auto: refresh rounds.remote.json"
-
-      - name: Push
-        uses: ad-m/github-push-action@v0.8.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
