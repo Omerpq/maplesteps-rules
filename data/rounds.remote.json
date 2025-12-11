@@ -1,11 +1,24 @@
 {
-  "version": "2025-12-09",
-  "last_checked": "2025-12-09T06:32:19.976Z",
+  "version": "2025-12-11",
+  "last_checked": "2025-12-11T06:33:31.569Z",
   "source_urls": [
     "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
     "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
   ],
   "entries": [
+    {
+      "date": "2025-12-10",
+      "category": "Canadian Experience Class",
+      "invitations": 6000,
+      "crs_cutoff": 520,
+      "draw_number": 384,
+      "invited": 6000,
+      "cutoff": 520,
+      "source_urls": [
+        "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
+        "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
+      ]
+    },
     {
       "date": "2025-12-08",
       "category": "Provincial Nominee Program (PNP)",
@@ -144,19 +157,6 @@
       "draw_number": 373,
       "invited": 2500,
       "cutoff": 472,
-      "source_urls": [
-        "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
-        "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
-      ]
-    },
-    {
-      "date": "2025-10-14",
-      "category": "Provincial Nominee Program (PNP)",
-      "invitations": 345,
-      "crs_cutoff": 778,
-      "draw_number": 372,
-      "invited": 345,
-      "cutoff": 778,
       "source_urls": [
         "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
         "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
