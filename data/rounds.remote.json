@@ -1,11 +1,24 @@
 {
-  "version": "2025-12-11",
-  "last_checked": "2025-12-11T06:33:31.569Z",
+  "version": "2025-12-12",
+  "last_checked": "2025-12-12T06:32:43.260Z",
   "source_urls": [
     "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
     "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
   ],
   "entries": [
+    {
+      "date": "2025-12-11",
+      "category": "Healthcare and social services occupations",
+      "invitations": 1000,
+      "crs_cutoff": 476,
+      "draw_number": 385,
+      "invited": 1000,
+      "cutoff": 476,
+      "source_urls": [
+        "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
+        "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
+      ]
+    },
     {
       "date": "2025-12-10",
       "category": "Canadian Experience Class",
@@ -144,19 +157,6 @@
       "draw_number": 374,
       "invited": 302,
       "cutoff": 761,
-      "source_urls": [
-        "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
-        "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
-      ]
-    },
-    {
-      "date": "2025-10-15",
-      "category": "Healthcare and social services occupations",
-      "invitations": 2500,
-      "crs_cutoff": 472,
-      "draw_number": 373,
-      "invited": 2500,
-      "cutoff": 472,
       "source_urls": [
         "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
         "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
