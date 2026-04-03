@@ -1,11 +1,24 @@
 {
-  "version": "2026-04-01",
-  "last_checked": "2026-04-01T07:20:08.554Z",
+  "version": "2026-04-03",
+  "last_checked": "2026-04-03T07:07:56.060Z",
   "source_urls": [
     "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
     "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
   ],
   "entries": [
+    {
+      "date": "2026-04-02",
+      "category": "Trade occupations",
+      "invitations": 3000,
+      "crs_cutoff": 477,
+      "draw_number": 408,
+      "invited": 3000,
+      "cutoff": 477,
+      "source_urls": [
+        "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
+        "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
+      ]
+    },
     {
       "date": "2026-03-31",
       "category": "Canadian Experience Class",
@@ -144,19 +157,6 @@
       "draw_number": 397,
       "invited": 391,
       "cutoff": 169,
-      "source_urls": [
-        "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
-        "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
-      ]
-    },
-    {
-      "date": "2026-02-17",
-      "category": "Canadian Experience Class",
-      "invitations": 6000,
-      "crs_cutoff": 508,
-      "draw_number": 396,
-      "invited": 6000,
-      "cutoff": 508,
       "source_urls": [
         "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
         "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
