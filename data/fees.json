@@ -1,22 +1,9 @@
 {
-  "version": "2025.08.01",
-  "last_checked": "2025-08-09T00:00:00Z",
+  "version": "2025-10-08",
+  "last_checked": "2025-10-08T12:41:36.317Z",
   "source_urls": [
     "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/fees.html"
   ],
-  "fees": [
-    {
-      "code": "PR_APPL",
-      "label": "Permanent residence processing fee (principal)",
-      "amount_cad": 950.0,
-      "last_changed": "2025-08-01"
-    },
-    {
-      "code": "RPRF",
-      "label": "Right of Permanent Residence Fee",
-      "amount_cad": 575.0,
-      "last_changed": "2025-08-01"
-    }
-  ],
-  "checksum": "sha256:DEMO"
+  "fees": [],
+  "checksum": "sha256:TBD"
 }
