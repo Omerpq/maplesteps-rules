@@ -1,11 +1,24 @@
 {
-  "version": "2026-07-10",
-  "last_checked": "2026-07-10T09:33:01.471Z",
+  "version": "2026-07-11",
+  "last_checked": "2026-07-11T07:53:59.864Z",
   "source_urls": [
     "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
     "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
   ],
   "entries": [
+    {
+      "date": "2026-07-10",
+      "category": "General (no program specified)",
+      "invitations": 500,
+      "crs_cutoff": 392,
+      "draw_number": 426,
+      "invited": 500,
+      "cutoff": 392,
+      "source_urls": [
+        "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
+        "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
+      ]
+    },
     {
       "date": "2026-07-09",
       "category": "French language proficiency (Version 1)",
@@ -144,19 +157,6 @@
       "draw_number": 415,
       "invited": 380,
       "cutoff": 798,
-      "source_urls": [
-        "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
-        "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
-      ]
-    },
-    {
-      "date": "2026-04-29",
-      "category": "French language proficiency (Version 1)",
-      "invitations": 4000,
-      "crs_cutoff": 400,
-      "draw_number": 414,
-      "invited": 4000,
-      "cutoff": 400,
       "source_urls": [
         "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
         "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
