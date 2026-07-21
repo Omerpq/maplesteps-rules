@@ -1,11 +1,24 @@
 {
-  "version": "2026-07-11",
-  "last_checked": "2026-07-11T07:53:59.864Z",
+  "version": "2026-07-21",
+  "last_checked": "2026-07-21T08:26:39.900Z",
   "source_urls": [
     "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
     "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
   ],
   "entries": [
+    {
+      "date": "2026-07-20",
+      "category": "Provincial Nominee Program (PNP)",
+      "invitations": 511,
+      "crs_cutoff": 744,
+      "draw_number": 427,
+      "invited": 511,
+      "cutoff": 744,
+      "source_urls": [
+        "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
+        "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
+      ]
+    },
     {
       "date": "2026-07-10",
       "category": "General (no program specified)",
@@ -144,19 +157,6 @@
       "draw_number": 416,
       "invited": 334,
       "cutoff": 805,
-      "source_urls": [
-        "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
-        "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
-      ]
-    },
-    {
-      "date": "2026-05-11",
-      "category": "Provincial Nominee Program (PNP)",
-      "invitations": 380,
-      "crs_cutoff": 798,
-      "draw_number": 415,
-      "invited": 380,
-      "cutoff": 798,
       "source_urls": [
         "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
         "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
