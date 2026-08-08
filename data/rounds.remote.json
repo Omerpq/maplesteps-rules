@@ -1,11 +1,24 @@
 {
-  "version": "2026-08-07",
-  "last_checked": "2026-08-07T07:13:03.971Z",
+  "version": "2026-08-08",
+  "last_checked": "2026-08-08T06:50:49.070Z",
   "source_urls": [
     "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
     "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
   ],
   "entries": [
+    {
+      "date": "2026-08-07",
+      "category": "Transport occupations",
+      "invitations": 300,
+      "crs_cutoff": 470,
+      "draw_number": 434,
+      "invited": 300,
+      "cutoff": 470,
+      "source_urls": [
+        "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
+        "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
+      ]
+    },
     {
       "date": "2026-08-06",
       "category": "French language proficiency (Version 1)",
@@ -144,19 +157,6 @@
       "draw_number": 423,
       "invited": 534,
       "cutoff": 708,
-      "source_urls": [
-        "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
-        "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
-      ]
-    },
-    {
-      "date": "2026-06-25",
-      "category": "Healthcare and social services occupations",
-      "invitations": 4000,
-      "crs_cutoff": 475,
-      "draw_number": 422,
-      "invited": 4000,
-      "cutoff": 475,
       "source_urls": [
         "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
         "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
