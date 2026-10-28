@@ -1,11 +1,24 @@
 {
-  "version": "2026-10-27",
-  "last_checked": "2026-10-27T11:39:00.523Z",
+  "version": "2026-10-28",
+  "last_checked": "2026-10-28T12:10:26.280Z",
   "source_urls": [
     "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
     "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
   ],
   "entries": [
+    {
+      "date": "2026-10-27",
+      "category": "French language proficiency (Version 1)",
+      "invitations": 5000,
+      "crs_cutoff": 407,
+      "draw_number": 452,
+      "invited": 5000,
+      "cutoff": 407,
+      "source_urls": [
+        "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
+        "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
+      ]
+    },
     {
       "date": "2026-10-26",
       "category": "Provincial Nominee Program (PNP)",
@@ -144,19 +157,6 @@
       "draw_number": 441,
       "invited": 3500,
       "cutoff": 475,
-      "source_urls": [
-        "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
-        "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
-      ]
-    },
-    {
-      "date": "2026-09-03",
-      "category": "General (no program specified)",
-      "invitations": 229,
-      "crs_cutoff": 198,
-      "draw_number": 440,
-      "invited": 229,
-      "cutoff": 198,
       "source_urls": [
         "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html",
         "https://www.canada.ca/content/dam/ircc/documents/json/ee_rounds_123_en.json"
