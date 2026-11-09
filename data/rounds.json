@@ -1,20 +1,9 @@
 {
-  "version": "2025.08.09",
-  "last_checked": "2025-08-09T00:00:00Z",
+  "version": "2025-10-26",
+  "last_checked": "2025-10-26T12:37:24.791Z",
   "source_urls": [
     "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/rounds-invitations.html"
   ],
-  "entries": [
-    {
-      "date": "2025-08-08",
-      "draw_number": 330,
-      "program": "No program specified",
-      "category": "General",
-      "crs_cutoff": 420,
-      "invitations": 3500,
-      "notes": "",
-      "source_url": "https://www.canada.ca/.../2025-08-08.html"
-    }
-  ],
-  "checksum": "sha256:DEMO"
+  "entries": [],
+  "checksum": "sha256:TBD"
 }
